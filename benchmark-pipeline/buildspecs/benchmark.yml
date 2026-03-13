@@ -10,6 +10,7 @@ phases:
       - npm install -g aws-cdk
       - curl -fsSL https://transform-cli.awsstatic.com/install.sh | bash
       - atx --version
+      - export ATX_SHELL_TIMEOUT=1800
   build:
     commands:
       - python scripts/run_benchmark.py
