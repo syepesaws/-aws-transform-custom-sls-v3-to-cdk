@@ -21,7 +21,25 @@ def load_results():
 
 
 def status_icon(s):
-    return "✅" if s == "success" else "❌"
+    return {"success": "✅", "partial": "⚠️", "failure": "❌"}.get(s, "❓")
+
+
+def compute_criteria_score(r):
+    """Return (passed, total_verifiable) from criteria, derive effective status."""
+    criteria = r.get("criteria", {})
+    if not criteria:
+        return None, None, r.get("transformation_status", "unknown")
+    passed = sum(1 for v in criteria.values() if v.get("status") == "PASS")
+    verifiable = sum(1 for v in criteria.values() if v.get("status") in ("PASS", "FAIL"))
+    if verifiable == 0:
+        return passed, verifiable, r.get("transformation_status", "unknown")
+    if passed == verifiable:
+        status = "success"
+    elif passed > 0:
+        status = "partial"
+    else:
+        status = "failure"
+    return passed, verifiable, status
 
 
 def build_icon(s):
@@ -31,14 +49,16 @@ def build_icon(s):
 def generate_markdown(results):
     now = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
     total = len(results)
-    success = sum(1 for r in results if r["transformation_status"] == "success")
+    scores = [compute_criteria_score(r) for r in results]
+    success = sum(1 for _, _, s in scores if s == "success")
+    partial = sum(1 for _, _, s in scores if s == "partial")
     builds = sum(1 for r in results if r["build_status"] == "pass")
     atx_success = sum(1 for r in results if r.get("atx_status") == "success")
 
     lines = [
         "# Benchmark Results\n",
         f"> Last updated: {now}\n",
-        f"**{success}/{total}** transformations succeeded | **{builds}/{total}** builds passed | **{atx_success}/{total}** ATX reported success\n",
+        f"**{success}/{total}** succeeded | **{partial}/{total}** partial | **{builds}/{total}** builds passed | **{atx_success}/{total}** ATX reported success\n",
     ]
 
     # Total cost
@@ -48,19 +68,22 @@ def generate_markdown(results):
 
     lines.extend([
         "## Summary\n",
-        "| Repository | Stars | LOC | Status | Build | Time (s) | Agent Min | Cost | Knowledge Items |",
-        "|------------|-------|-----|--------|-------|----------|-----------|------|-----------------|",
+        "| Repository | Stars | LOC | Status | Score | Build | Time (s) | Agent Min | Cost | Knowledge Items |",
+        "|------------|-------|-----|--------|-------|-------|----------|-----------|------|-----------------|",
     ])
 
     for r in results:
         cost = r.get("cost", "N/A")
         stars = r.get("stars", "N/A")
         loc = r.get("loc", "N/A")
+        passed, verifiable, effective_status = compute_criteria_score(r)
+        score = f"{passed}/{verifiable}" if verifiable is not None else "—"
         lines.append(
             f"| [{r['repo']}]({r['url']}) "
             f"| {stars} "
             f"| {loc} "
-            f"| {status_icon(r['transformation_status'])} "
+            f"| {status_icon(effective_status)} "
+            f"| {score} "
             f"| {build_icon(r['build_status'])} "
             f"| {r['duration_seconds']} "
             f"| {r['agent_minutes']} "
@@ -77,6 +100,9 @@ def generate_markdown(results):
         lines.append(f"- **Stars**: {r.get('stars', 'N/A')}")
         lines.append(f"- **LOC**: {r.get('loc', 'N/A')}")
         lines.append(f"- **Status**: {status_icon(r['transformation_status'])} {r['transformation_status']}")
+        passed, verifiable, effective_status = compute_criteria_score(r)
+        if verifiable is not None:
+            lines.append(f"- **Validation score**: {passed}/{verifiable} criteria passed → {status_icon(effective_status)} {effective_status}")
         if r.get("failure_reason"):
             clean_reason = re.sub(r"\x1b\[[0-9;]*m", "", r["failure_reason"])
             lines.append(f"- **Failure reason**: {clean_reason}")
