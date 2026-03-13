@@ -47,14 +47,18 @@ def generate_markdown(results):
 
     lines.extend([
         "## Summary\n",
-        "| Repository | Status | Build | Time (s) | Agent Min | Cost | Knowledge Items |",
-        "|------------|--------|-------|----------|-----------|------|-----------------|",
+        "| Repository | Stars | LOC | Status | Build | Time (s) | Agent Min | Cost | Knowledge Items |",
+        "|------------|-------|-----|--------|-------|----------|-----------|------|-----------------|",
     ])
 
     for r in results:
         cost = r.get("cost", "N/A")
+        stars = r.get("stars", "N/A")
+        loc = r.get("loc", "N/A")
         lines.append(
             f"| [{r['repo']}]({r['url']}) "
+            f"| {stars} "
+            f"| {loc} "
             f"| {status_icon(r['transformation_status'])} "
             f"| {build_icon(r['build_status'])} "
             f"| {r['duration_seconds']} "
@@ -69,6 +73,8 @@ def generate_markdown(results):
         name = r["repo"]
         lines.append(f"### {name}\n")
         lines.append(f"- **URL**: {r['url']}")
+        lines.append(f"- **Stars**: {r.get('stars', 'N/A')}")
+        lines.append(f"- **LOC**: {r.get('loc', 'N/A')}")
         lines.append(f"- **Status**: {status_icon(r['transformation_status'])} {r['transformation_status']}")
         if r.get("failure_reason"):
             clean_reason = re.sub(r"\x1b\[[0-9;]*m", "", r["failure_reason"])

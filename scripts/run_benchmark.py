@@ -23,7 +23,7 @@ def run(cmd, cwd=None, capture=True):
     return r.returncode, (r.stdout + r.stderr) if capture else ""
 
 
-def run_single_repo(name, url, td_name, build_cmd, results_dir, work_dir):
+def run_single_repo(name, url, td_name, build_cmd, results_dir, work_dir, stars="N/A"):
     """Run benchmark for a single repo. Returns result dict."""
     repo_dir = os.path.join(work_dir, name)
     os.makedirs(results_dir, exist_ok=True)
@@ -34,6 +34,14 @@ def run_single_repo(name, url, td_name, build_cmd, results_dir, work_dir):
         print("  Using cached clone")
     else:
         run(f"git clone --depth 1 {url} {repo_dir}")
+
+    # Count lines of code (before transformation)
+    loc_exit, loc_out = run(
+        "find . -type f \\( -name '*.ts' -o -name '*.js' -o -name '*.yml' -o -name '*.yaml' -o -name '*.json' \\) "
+        "-not -path '*/node_modules/*' -not -path '*/.git/*' -not -path '*/cdk.out/*' | xargs wc -l | tail -1",
+        cwd=repo_dir,
+    )
+    loc = loc_out.strip().split()[0] if loc_exit == 0 and loc_out.strip() else "N/A"
 
     # Run ATX
     start = time.time()
@@ -91,6 +99,8 @@ def run_single_repo(name, url, td_name, build_cmd, results_dir, work_dir):
     result = {
         "repo": name,
         "url": url,
+        "stars": stars,
+        "loc": loc,
         "transformation_status": "failure" if atx_failed else "success",
         "failure_reason": failure_reason,
         "build_status": build_status,
@@ -120,8 +130,9 @@ def main():
         url = os.environ["REPO_URL"]
         td_name = os.environ.get("TD_NAME", "sls-v3-to-cdk")
         build_cmd = os.environ.get("BUILD_CMD", "npx cdk synth")
+        stars = os.environ.get("REPO_STARS", "N/A")
         print(f"--- Single-repo mode: {name} ---")
-        result = run_single_repo(name, url, td_name, build_cmd, RESULTS_DIR, WORK_DIR)
+        result = run_single_repo(name, url, td_name, build_cmd, RESULTS_DIR, WORK_DIR, stars=stars)
         status = "✅" if result["transformation_status"] == "success" else "❌"
         print(f"  Status: {status} | Build: {result['build_status']} | Time: {result['duration_seconds']}s | Agent min: {result['agent_minutes']}")
         return
@@ -145,7 +156,7 @@ def main():
 
     for i, repo in enumerate(repos):
         print(f"--- [{i+1}/{len(repos)}] {repo['name']} ---")
-        result = run_single_repo(repo["name"], repo["url"], td_name, build_cmd, RESULTS_DIR, WORK_DIR)
+        result = run_single_repo(repo["name"], repo["url"], td_name, build_cmd, RESULTS_DIR, WORK_DIR, stars=str(repo.get("stars", "N/A")))
         status = "✅" if result["transformation_status"] == "success" else "❌"
         print(f"  Status: {status} | Build: {result['build_status']} | Time: {result['duration_seconds']}s | Agent min: {result['agent_minutes']}\n")
 

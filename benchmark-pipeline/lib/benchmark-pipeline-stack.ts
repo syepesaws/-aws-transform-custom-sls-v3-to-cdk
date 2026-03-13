@@ -12,6 +12,7 @@ import { Construct } from 'constructs';
 interface RepoConfig {
   name: string;
   url: string;
+  stars?: number;
 }
 
 interface BenchmarkConfig {
@@ -66,6 +67,7 @@ export class BenchmarkPipelineStack extends cdk.Stack {
         environmentVariables: {
           REPO_NAME: { value: repo.name },
           REPO_URL: { value: repo.url },
+          REPO_STARS: { value: String(repo.stars ?? 'N/A') },
           TD_NAME: { value: config.transformation_name },
           BUILD_CMD: { value: config.build_command },
           RESULTS_BUCKET: { value: resultsBucket.bucketName },
