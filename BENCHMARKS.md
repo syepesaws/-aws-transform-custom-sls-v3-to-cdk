@@ -1,70 +1,79 @@
 # Benchmark Results
 
-> Last updated: 2026-03-13 16:51 UTC
+> Last updated: 2026-03-13 18:54 UTC
 
-**4/5** transformations succeeded | **5/5** builds passed
+**5/5** succeeded | **0/5** partial | **5/5** builds passed | **0/5** ATX reported success
 
-**Total agent minutes**: 316.19 | **Total cost**: $11.07 (@ $0.035/min)
+**Total agent minutes**: 305.16 | **Total cost**: $10.68 (@ $0.035/min)
 
 ## Summary
 
-| Repository | Status | Build | Time (s) | Agent Min | Cost | Knowledge Items |
-|------------|--------|-------|----------|-----------|------|-----------------|
-| [Serverless-Boilerplate-Express-TypeScript](https://github.com/ixartz/Serverless-Boilerplate-Express-TypeScript) | ✅ | ✅ | 1644 | 54.43 | $1.91 | 2 |
-| [aws-lambda-typescript](https://github.com/balassy/aws-lambda-typescript) | ❌ | ✅ | 1609 | 69.49 | $2.43 | 2 |
-| [serverless-architecture-boilerplate](https://github.com/msfidelis/serverless-architecture-boilerplate) | ✅ | ✅ | 2056 | 72.60 | $2.54 | 2 |
-| [serverless-puppeteer-layers](https://github.com/RafalWilinski/serverless-puppeteer-layers) | ✅ | ✅ | 1193 | 31.42 | $1.10 | 2 |
-| [serverless-react-boilerplate](https://github.com/arabold/serverless-react-boilerplate) | ✅ | ✅ | 1969 | 88.25 | $3.09 | 2 |
+| Repository | Stars | LOC | Status | Score | Build | Time (s) | Agent Min | Cost | Knowledge Items |
+|------------|-------|-----|--------|-------|-------|----------|-----------|------|-----------------|
+| [Serverless-Boilerplate-Express-TypeScript](https://github.com/ixartz/Serverless-Boilerplate-Express-TypeScript) | N/A | N/A | ✅ | — | ✅ | 1628 | 52.91 | $1.85 | 2 |
+| [aws-lambda-typescript](https://github.com/balassy/aws-lambda-typescript) | N/A | N/A | ✅ | — | ✅ | 2144 | 64.21 | $2.25 | 2 |
+| [serverless-architecture-boilerplate](https://github.com/msfidelis/serverless-architecture-boilerplate) | N/A | N/A | ✅ | — | ✅ | 1829 | 76.41 | $2.67 | 2 |
+| [serverless-puppeteer-layers](https://github.com/RafalWilinski/serverless-puppeteer-layers) | N/A | N/A | ✅ | — | ✅ | 1204 | 26.65 | $0.93 | 2 |
+| [serverless-react-boilerplate](https://github.com/arabold/serverless-react-boilerplate) | N/A | N/A | ✅ | — | ✅ | 2100 | 84.98 | $2.97 | 2 |
 
 ## Detailed Results
 
 ### Serverless-Boilerplate-Express-TypeScript
 
 - **URL**: https://github.com/ixartz/Serverless-Boilerplate-Express-TypeScript
+- **Stars**: N/A
+- **LOC**: N/A
 - **Status**: ✅ success
 - **Build**: ✅ pass
-- **Time taken**: 1644s
-- **Agent minutes**: 54.43
-- **Cost**: $1.91
+- **Time taken**: 1628s
+- **Agent minutes**: 52.91
+- **Cost**: $1.85
 - **Knowledge items**: 2
 
 ### aws-lambda-typescript
 
 - **URL**: https://github.com/balassy/aws-lambda-typescript
-- **Status**: ❌ failure
-- **Failure reason**: Execution was not successful, received event with FAILURE status
+- **Stars**: N/A
+- **LOC**: N/A
+- **Status**: ✅ success
 - **Build**: ✅ pass
-- **Time taken**: 1609s
-- **Agent minutes**: 69.49
-- **Cost**: $2.43
+- **Time taken**: 2144s
+- **Agent minutes**: 64.21
+- **Cost**: $2.25
 - **Knowledge items**: 2
 
 ### serverless-architecture-boilerplate
 
 - **URL**: https://github.com/msfidelis/serverless-architecture-boilerplate
+- **Stars**: N/A
+- **LOC**: N/A
 - **Status**: ✅ success
 - **Build**: ✅ pass
-- **Time taken**: 2056s
-- **Agent minutes**: 72.60
-- **Cost**: $2.54
+- **Time taken**: 1829s
+- **Agent minutes**: 76.41
+- **Cost**: $2.67
 - **Knowledge items**: 2
 
 ### serverless-puppeteer-layers
 
 - **URL**: https://github.com/RafalWilinski/serverless-puppeteer-layers
+- **Stars**: N/A
+- **LOC**: N/A
 - **Status**: ✅ success
 - **Build**: ✅ pass
-- **Time taken**: 1193s
-- **Agent minutes**: 31.42
-- **Cost**: $1.10
+- **Time taken**: 1204s
+- **Agent minutes**: 26.65
+- **Cost**: $0.93
 - **Knowledge items**: 2
 
 ### serverless-react-boilerplate
 
 - **URL**: https://github.com/arabold/serverless-react-boilerplate
+- **Stars**: N/A
+- **LOC**: N/A
 - **Status**: ✅ success
 - **Build**: ✅ pass
-- **Time taken**: 1969s
-- **Agent minutes**: 88.25
-- **Cost**: $3.09
+- **Time taken**: 2100s
+- **Agent minutes**: 84.98
+- **Cost**: $2.97
 - **Knowledge items**: 2

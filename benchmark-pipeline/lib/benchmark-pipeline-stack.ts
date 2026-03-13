@@ -47,6 +47,16 @@ export class BenchmarkPipelineStack extends cdk.Stack {
     // --- Pipeline artifacts ---
     const sourceOutput = new codepipeline.Artifact('SourceOutput');
 
+    // --- Source action ---
+    const sourceAction = new codepipeline_actions.CodeStarConnectionsSourceAction({
+      actionName: 'GitHub',
+      connectionArn: connectionArn.valueAsString,
+      owner: 'syepesaws',
+      repo: '-aws-transform-custom-sls-v3-to-cdk',
+      branch: 'main',
+      output: sourceOutput,
+    });
+
     // --- ATX policy for CodeBuild roles ---
     const atxPolicy = new iam.PolicyStatement({
       effect: iam.Effect.ALLOW,
@@ -103,19 +113,26 @@ export class BenchmarkPipelineStack extends cdk.Stack {
     // --- CodePipeline ---
     new codepipeline.Pipeline(this, 'BenchmarkPipeline', {
       pipelineName: 'atx-sls-v3-to-cdk-benchmark',
+      pipelineType: codepipeline.PipelineType.V2,
+      triggers: [{
+        providerType: codepipeline.ProviderType.CODE_STAR_SOURCE_CONNECTION,
+        gitConfiguration: {
+          sourceAction: sourceAction,
+          pushFilter: [{
+            branchesIncludes: ['main'],
+            filePathsIncludes: [
+              'scripts/**',
+              'transformation-definitions/**',
+              'config.yaml',
+              'benchmark-pipeline/buildspecs/**',
+            ],
+          }],
+        },
+      }],
       stages: [
         {
           stageName: 'Source',
-          actions: [
-            new codepipeline_actions.CodeStarConnectionsSourceAction({
-              actionName: 'GitHub',
-              connectionArn: connectionArn.valueAsString,
-              owner: 'syepesaws',
-              repo: '-aws-transform-custom-sls-v3-to-cdk',
-              branch: 'main',
-              output: sourceOutput,
-            }),
-          ],
+          actions: [sourceAction],
         },
         {
           stageName: 'Benchmark',
