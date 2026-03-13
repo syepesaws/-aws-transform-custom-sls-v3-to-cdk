@@ -37,18 +37,28 @@ def generate_markdown(results):
         "# Benchmark Results\n",
         f"> Last updated: {now}\n",
         f"**{success}/{total}** transformations succeeded | **{builds}/{total}** builds passed\n",
-        "## Summary\n",
-        "| Repository | Status | Build | Time (s) | Agent Min | Knowledge Items |",
-        "|------------|--------|-------|----------|-----------|-----------------|",
     ]
 
+    # Total cost
+    total_cost = sum(float(r["agent_minutes"]) * 0.035 for r in results if r.get("agent_minutes", "N/A") != "N/A")
+    total_agent_min = sum(float(r["agent_minutes"]) for r in results if r.get("agent_minutes", "N/A") != "N/A")
+    lines.append(f"**Total agent minutes**: {total_agent_min:.2f} | **Total cost**: ${total_cost:.2f} (@ $0.035/min)\n")
+
+    lines.extend([
+        "## Summary\n",
+        "| Repository | Status | Build | Time (s) | Agent Min | Cost | Knowledge Items |",
+        "|------------|--------|-------|----------|-----------|------|-----------------|",
+    ])
+
     for r in results:
+        cost = r.get("cost", "N/A")
         lines.append(
             f"| [{r['repo']}]({r['url']}) "
             f"| {status_icon(r['transformation_status'])} "
             f"| {build_icon(r['build_status'])} "
             f"| {r['duration_seconds']} "
             f"| {r['agent_minutes']} "
+            f"| {cost} "
             f"| {r['knowledge_items']} |"
         )
 
@@ -59,9 +69,12 @@ def generate_markdown(results):
         lines.append(f"### {name}\n")
         lines.append(f"- **URL**: {r['url']}")
         lines.append(f"- **Status**: {status_icon(r['transformation_status'])} {r['transformation_status']}")
+        if r.get("failure_reason"):
+            lines.append(f"- **Failure reason**: {r['failure_reason']}")
         lines.append(f"- **Build**: {build_icon(r['build_status'])} {r['build_status']}")
         lines.append(f"- **Time taken**: {r['duration_seconds']}s")
         lines.append(f"- **Agent minutes**: {r['agent_minutes']}")
+        lines.append(f"- **Cost**: {r.get('cost', 'N/A')}")
         lines.append(f"- **Knowledge items**: {r['knowledge_items']}")
 
         # Include build log snippet if exists

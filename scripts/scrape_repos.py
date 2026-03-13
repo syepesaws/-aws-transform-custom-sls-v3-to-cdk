@@ -20,12 +20,14 @@ MAX_CANDIDATES = 30  # fetch more than 5 so you can curate
 
 
 def search_repos(page=1, per_page=30):
-    """Search for repos containing serverless.yml with >100 stars."""
+    """Search for repos likely using Serverless Framework, sorted by stars descending."""
     resp = requests.get(
-        f"{GITHUB_API}/search/code",
+        f"{GITHUB_API}/search/repositories",
         headers=HEADERS,
         params={
-            "q": f"filename:serverless.yml stars:>{MIN_STARS}",
+            "q": f"serverless framework stars:>{MIN_STARS}",
+            "sort": "stars",
+            "order": "desc",
             "per_page": per_page,
             "page": page,
         },
@@ -36,8 +38,12 @@ def search_repos(page=1, per_page=30):
         print(f"Rate limited. Waiting {wait}s...")
         time.sleep(wait)
         return search_repos(page, per_page)
+    if resp.status_code != 200:
+        print(f"  API error {resp.status_code}: {resp.text[:200]}")
     resp.raise_for_status()
-    return resp.json()
+    data = resp.json()
+    print(f"  Page {page}: {data.get('total_count', 0)} total, {len(data.get('items', []))} returned")
+    return data
 
 
 def get_repo_details(owner, repo):
@@ -83,32 +89,32 @@ def main():
     for page in range(1, 4):  # up to 3 pages
         data = search_repos(page=page)
         for item in data.get("items", []):
-            full_name = item["repository"]["full_name"]
+            full_name = item["full_name"]
             if full_name in seen:
                 continue
             seen.add(full_name)
 
+            if item.get("archived") or item.get("fork"):
+                continue
+
             owner, repo = full_name.split("/")
-            try:
-                details = get_repo_details(owner, repo)
-            except requests.HTTPError:
-                continue
 
-            if details.get("archived") or details.get("fork"):
-                continue
-
+            # Verify serverless.yml exists at root
             features = detect_serverless_features(owner, repo)
+            if features["functions_count"] == 0 and not features["plugins"]:
+                print(f"  skip {full_name} — no functions/plugins in serverless.yml")
+                continue
 
             candidates.append({
                 "name": repo,
-                "url": details["html_url"],
-                "stars": details["stargazers_count"],
-                "language": details.get("language"),
+                "url": item["html_url"],
+                "stars": item["stargazers_count"],
+                "language": item.get("language"),
                 "plugins": features["plugins"],
                 "resources": features["resources"],
                 "functions_count": features["functions_count"],
             })
-            print(f"  ★ {details['stargazers_count']:>5}  {full_name} — {features['functions_count']} fns, {len(features['plugins'])} plugins")
+            print(f"  ★ {item['stargazers_count']:>5}  {full_name} — {features['functions_count']} fns, {len(features['plugins'])} plugins")
 
             if len(candidates) >= MAX_CANDIDATES:
                 break

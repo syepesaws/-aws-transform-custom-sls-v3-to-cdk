@@ -1,0 +1,21 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.12
+      nodejs: 20
+    commands:
+      - pip install pyyaml
+      - npm install -g aws-cdk
+      - curl -fsSL https://transform-cli.awsstatic.com/install.sh | bash
+      - atx --version
+  build:
+    commands:
+      - python scripts/run_benchmark.py
+  post_build:
+    commands:
+      - export RUN_ID="${CODEBUILD_RESOLVED_SOURCE_VERSION:-$(date -u +%Y-%m-%dT%H-%M-%SZ)}"
+      - aws s3 cp "benchmark-results/${REPO_NAME}.json" "s3://${RESULTS_BUCKET}/runs/${RUN_ID}/${REPO_NAME}/result.json"
+      - aws s3 cp "benchmark-results/${REPO_NAME}_atx.log" "s3://${RESULTS_BUCKET}/runs/${RUN_ID}/${REPO_NAME}/atx.log"
+      - aws s3 cp "benchmark-results/${REPO_NAME}_build.log" "s3://${RESULTS_BUCKET}/runs/${RUN_ID}/${REPO_NAME}/build.log"

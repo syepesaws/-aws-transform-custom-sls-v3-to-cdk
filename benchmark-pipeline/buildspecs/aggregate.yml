@@ -1,0 +1,22 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.12
+    commands:
+      - pip install pyyaml
+  build:
+    commands:
+      - export RUN_ID="${CODEBUILD_RESOLVED_SOURCE_VERSION:-$(date -u +%Y-%m-%dT%H-%M-%SZ)}"
+      # Download all result.json files for this run
+      - mkdir -p /tmp/results
+      - aws s3 cp "s3://${RESULTS_BUCKET}/runs/${RUN_ID}/" /tmp/results/ --recursive --exclude "*" --include "*/result.json"
+      # Flatten JSONs into benchmark-results/ for the aggregator script
+      - mkdir -p benchmark-results
+      - find /tmp/results -name result.json -exec sh -c 'cp "$1" "benchmark-results/$(basename $(dirname $1)).json"' _ {} \;
+      # Run aggregation
+      - python scripts/aggregate_results.py
+      # Upload report
+      - aws s3 cp BENCHMARKS.md "s3://${RESULTS_BUCKET}/runs/${RUN_ID}/BENCHMARKS.md"
+      - aws s3 cp BENCHMARKS.md "s3://${RESULTS_BUCKET}/latest/BENCHMARKS.md"

@@ -1,6 +1,42 @@
-# Benchmark configuration — edit repos list after running scrape_repos.py
 transformation_name: sls-v3-to-cdk
 build_command: npx cdk synth
-
-# Candidate repos (populated by scrape_repos.py, curate to your top 5)
-repos: []
+repos:
+- url: https://github.com/ixartz/Serverless-Boilerplate-Express-TypeScript
+  name: Serverless-Boilerplate-Express-TypeScript
+  stars: 571
+  plugins:
+  - serverless-dotenv-plugin
+  - serverless-esbuild
+  - serverless-offline
+- url: https://github.com/msfidelis/serverless-architecture-boilerplate
+  name: serverless-architecture-boilerplate
+  stars: 391
+  plugins:
+  - serverless-pseudo-parameters
+  - serverless-dynamodb-local
+  - serverless-offline-scheduler
+  - serverless-offline-sqs-esmq
+  - serverless-offline
+- url: https://github.com/RafalWilinski/serverless-puppeteer-layers
+  name: serverless-puppeteer-layers
+  stars: 272
+  plugins:
+  - serverless-apigw-binary
+  - serverless-apigwy-binary
+- url: https://github.com/balassy/aws-lambda-typescript
+  name: aws-lambda-typescript
+  stars: 265
+  plugins:
+  - serverless-plugin-typescript
+  - serverless-offline
+  - serverless-aws-documentation
+  - serverless-domain-manager
+  - serverless-stack-output
+- url: https://github.com/arabold/serverless-react-boilerplate
+  name: serverless-react-boilerplate
+  stars: 245
+  plugins:
+  - serverless-webpack
+  - serverless-plugin-scripts
+  - serverless-offline
+  - serverless-s3-deploy

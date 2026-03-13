@@ -4,3 +4,5 @@ __pycache__/
 *.pyc
 .DS_Store
 benchmark-results/*.log
+benchmark-pipeline/node_modules/
+benchmark-pipeline/cdk.out/

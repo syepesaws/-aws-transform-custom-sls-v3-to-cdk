@@ -1,0 +1,13 @@
+{
+  "repo": "aws-lambda-typescript",
+  "url": "https://github.com/balassy/aws-lambda-typescript",
+  "transformation_status": "failure",
+  "build_status": "pass",
+  "duration_seconds": 1807,
+  "agent_minutes": "79.04",
+  "knowledge_items": "N/A",
+  "timestamp": "2026-03-13T05:19:48Z",
+  "conversation_id": "20260313_044934_86eb464f",
+  "failure_reason": "Execution was not successful, received event with FAILURE status",
+  "cost": "$2.77"
+}

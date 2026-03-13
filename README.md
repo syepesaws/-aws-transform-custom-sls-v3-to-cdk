@@ -11,7 +11,7 @@ examples/                     # Sample repos for manual testing
 benchmark-results/            # Per-repo JSON results + aggregated report
 scripts/
   scrape_repos.py             # GitHub search for candidate repos
-  run_benchmark.sh            # ATX execution wrapper with telemetry
+  run_benchmark.py            # ATX execution wrapper with telemetry
   aggregate_results.py        # Parse results → BENCHMARKS.md
 config.yaml                   # Repo candidates + benchmark parameters
 BENCHMARKS.md                 # Results summary
@@ -38,7 +38,7 @@ atx custom def publish -n sls-v3-to-cdk \
   --sd transformation-definitions/td-sls-v3-to-cdk
 
 # 4. Run benchmarks
-bash scripts/run_benchmark.sh
+python scripts/run_benchmark.py
 
 # 5. Aggregate results
 python scripts/aggregate_results.py
@@ -54,5 +54,44 @@ Each execution captures:
 - Knowledge items generated
 - Manual fixes required
 - Code quality observations
+
+## Pipeline (CodeBuild / CodePipeline)
+
+For parallelized remote execution, a CDK project is provided in `benchmark-pipeline/`.
+
+### Architecture
+
+```
+CodePipeline
+  ├─ Source: GitLab (CodeConnection)
+  ├─ Benchmark: 5 parallel CodeBuild actions (one per repo)
+  │   └─ Each: clone → atx exec → build validation → upload to S3
+  └─ Aggregate: collect results → generate BENCHMARKS.md → upload to S3
+```
+
+### Deploy
+
+```bash
+# 1. Create a CodeConnection to GitLab in the AWS Console and note the ARN
+
+# 2. Deploy the pipeline stack
+cd benchmark-pipeline
+npm install
+npx cdk deploy --parameters ConnectionArn=arn:aws:codeconnections:REGION:ACCOUNT:connection/ID
+
+# 3. Approve the CodeConnection in the AWS Console (pending status after first deploy)
+```
+
+### S3 Results Structure
+
+```
+s3://benchmark-bucket/
+  runs/<timestamp>/
+    <repo-name>/result.json    # benchmark metrics
+    <repo-name>/atx.log        # full ATX output
+    <repo-name>/build.log      # build validation output
+    BENCHMARKS.md              # aggregated report
+  latest/BENCHMARKS.md         # always points to most recent run
+```
 
 See [BENCHMARKS.md](BENCHMARKS.md) for latest results.
