@@ -1,0 +1,6 @@
+.workdir/
+.venv/
+__pycache__/
+*.pyc
+.DS_Store
+benchmark-results/*.log

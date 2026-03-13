@@ -1,0 +1,6 @@
+# Benchmark configuration — edit repos list after running scrape_repos.py
+transformation_name: sls-v3-to-cdk
+build_command: npx cdk synth
+
+# Candidate repos (populated by scrape_repos.py, curate to your top 5)
+repos: []
