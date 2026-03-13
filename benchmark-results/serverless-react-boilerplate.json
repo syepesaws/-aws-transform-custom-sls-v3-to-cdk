@@ -1,13 +1,13 @@
 {
   "repo": "serverless-react-boilerplate",
   "url": "https://github.com/arabold/serverless-react-boilerplate",
-  "transformation_status": "failure",
+  "transformation_status": "success",
+  "failure_reason": "",
   "build_status": "pass",
-  "duration_seconds": 28393,
-  "agent_minutes": "N/A",
-  "knowledge_items": "N/A",
-  "timestamp": "2026-03-13T13:13:14Z",
-  "conversation_id": "20260313_051956_0c4d5d59",
-  "failure_reason": "Stream idle timeout: no data received for 900 seconds",
-  "cost": "N/A"
+  "duration_seconds": 1969,
+  "agent_minutes": "88.25",
+  "cost": "$3.09",
+  "knowledge_items": "2",
+  "conversation_id": "20260313_160025_200c4e9c",
+  "timestamp": "2026-03-13T16:33:27Z"
 }

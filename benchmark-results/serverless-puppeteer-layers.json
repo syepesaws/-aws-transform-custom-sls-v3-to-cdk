@@ -2,12 +2,12 @@
   "repo": "serverless-puppeteer-layers",
   "url": "https://github.com/RafalWilinski/serverless-puppeteer-layers",
   "transformation_status": "success",
-  "build_status": "pass",
-  "duration_seconds": 3789,
-  "agent_minutes": "38.99",
-  "knowledge_items": "N/A",
-  "timestamp": "2026-03-13T04:49:26Z",
-  "conversation_id": "20260313_034617_36480418",
   "failure_reason": "",
-  "cost": "$1.36"
+  "build_status": "pass",
+  "duration_seconds": 1193,
+  "agent_minutes": "31.42",
+  "cost": "$1.10",
+  "knowledge_items": "2",
+  "conversation_id": "20260313_160045_b6f481c3",
+  "timestamp": "2026-03-13T16:20:46Z"
 }

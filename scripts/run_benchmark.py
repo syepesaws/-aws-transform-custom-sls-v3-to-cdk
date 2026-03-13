@@ -62,7 +62,7 @@ def run_single_repo(name, url, td_name, build_cmd, results_dir, work_dir):
         for pattern in [r"Fatal error: (.+)", r"Error executing transformation: (.+)", r"(Execution was not successful[^\n]+)"]:
             fm = re.findall(pattern, output)
             if fm:
-                failure_reason = fm[-1].strip()
+                failure_reason = re.sub(r"\x1b\[[0-9;]*m", "", fm[-1]).strip()
                 break
         if not failure_reason and exit_code != 0:
             failure_reason = f"Exit code {exit_code}"

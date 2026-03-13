@@ -2,6 +2,7 @@
 """Aggregate per-repo JSON results into BENCHMARKS.md."""
 
 import json
+import re
 import glob
 import os
 from datetime import datetime, timezone
@@ -70,7 +71,8 @@ def generate_markdown(results):
         lines.append(f"- **URL**: {r['url']}")
         lines.append(f"- **Status**: {status_icon(r['transformation_status'])} {r['transformation_status']}")
         if r.get("failure_reason"):
-            lines.append(f"- **Failure reason**: {r['failure_reason']}")
+            clean_reason = re.sub(r"\x1b\[[0-9;]*m", "", r["failure_reason"])
+            lines.append(f"- **Failure reason**: {clean_reason}")
         lines.append(f"- **Build**: {build_icon(r['build_status'])} {r['build_status']}")
         lines.append(f"- **Time taken**: {r['duration_seconds']}s")
         lines.append(f"- **Agent minutes**: {r['agent_minutes']}")
