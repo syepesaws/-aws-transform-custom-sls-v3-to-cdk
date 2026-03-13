@@ -59,3 +59,41 @@ Convert Serverless Framework v3 applications to AWS CDK TypeScript with native c
 9. Event sources trigger correctly
 10. No serverless dependencies in package.json
 11. cdk.json properly configured
+
+## CRITICAL: Validation Report Output
+
+After completing all implementation steps and validation, you MUST write a file called `validation_report.json` in the root of the repository. This file is consumed by automated benchmarking and MUST follow this exact schema:
+
+```json
+{
+  "transformation_status": "success | partial | failure",
+  "summary": "Brief description of the transformation outcome",
+  "criteria": {
+    "cdk_synth": { "status": "PASS | FAIL | SKIP", "detail": "..." },
+    "lambda_functions": { "status": "PASS | FAIL | SKIP", "detail": "..." },
+    "api_gateway": { "status": "PASS | FAIL | SKIP", "detail": "..." },
+    "iam_permissions": { "status": "PASS | FAIL | SKIP", "detail": "..." },
+    "environment_variables": { "status": "PASS | FAIL | SKIP", "detail": "..." },
+    "cdk_deploy": { "status": "PASS | FAIL | SKIP", "detail": "..." },
+    "lambda_behavior": { "status": "PASS | FAIL | SKIP", "detail": "..." },
+    "api_responses": { "status": "PASS | FAIL | SKIP", "detail": "..." },
+    "event_sources": { "status": "PASS | FAIL | SKIP | N/A", "detail": "..." },
+    "no_serverless_deps": { "status": "PASS | FAIL | SKIP", "detail": "..." },
+    "cdk_json": { "status": "PASS | FAIL | SKIP", "detail": "..." }
+  },
+  "issues_encountered": ["list of issues found and how they were resolved"],
+  "manual_fixes_needed": ["list of items that could not be automatically resolved"],
+  "plugins_migrated": ["list of serverless plugins that were migrated"],
+  "functions_count": 0,
+  "resources_count": 0
+}
+```
+
+Rules for the report:
+- Use "PASS" only when the criterion was verified and passed
+- Use "FAIL" when the criterion was verified and failed
+- Use "SKIP" when the criterion requires live deployment and cannot be verified locally (criteria 6, 7, 8)
+- Use "N/A" when the criterion does not apply (e.g., no event sources)
+- Set `transformation_status` to "success" if all locally-verifiable criteria pass, "partial" if some fail, "failure" if critical criteria (1, 2, 10) fail
+- The `detail` field should contain a one-line explanation of the result
+- IMPORTANT: Write this file even if the transformation encounters errors

@@ -92,6 +92,24 @@ def run_single_repo(name, url, td_name, build_cmd, results_dir, work_dir, stars=
             except json.JSONDecodeError:
                 pass
 
+    # Parse validation report if available
+    validation_report = {}
+    report_path = os.path.join(repo_dir, "validation_report.json")
+    if os.path.exists(report_path):
+        try:
+            with open(report_path) as f:
+                validation_report = json.load(f)
+        except json.JSONDecodeError:
+            pass
+
+    # Determine true transformation status from validation report (overrides ATX status)
+    if validation_report.get("transformation_status"):
+        effective_status = validation_report["transformation_status"]
+    elif atx_failed:
+        effective_status = "failure"
+    else:
+        effective_status = "success"
+
     # Cost calculation ($0.035 per agent minute)
     COST_PER_MINUTE = 0.035
     cost = f"${float(agent_minutes) * COST_PER_MINUTE:.2f}" if agent_minutes != "N/A" else "N/A"
@@ -101,7 +119,8 @@ def run_single_repo(name, url, td_name, build_cmd, results_dir, work_dir, stars=
         "url": url,
         "stars": stars,
         "loc": loc,
-        "transformation_status": "failure" if atx_failed else "success",
+        "transformation_status": effective_status,
+        "atx_status": "failure" if atx_failed else "success",
         "failure_reason": failure_reason,
         "build_status": build_status,
         "duration_seconds": duration,
@@ -110,6 +129,11 @@ def run_single_repo(name, url, td_name, build_cmd, results_dir, work_dir, stars=
         "knowledge_items": ki_count,
         "conversation_id": conv_id,
         "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+        "criteria": validation_report.get("criteria", {}),
+        "issues_encountered": validation_report.get("issues_encountered", []),
+        "manual_fixes_needed": validation_report.get("manual_fixes_needed", []),
+        "plugins_migrated": validation_report.get("plugins_migrated", []),
+        "functions_count": validation_report.get("functions_count", "N/A"),
     }
 
     result_file = os.path.join(results_dir, f"{name}.json")

@@ -33,11 +33,12 @@ def generate_markdown(results):
     total = len(results)
     success = sum(1 for r in results if r["transformation_status"] == "success")
     builds = sum(1 for r in results if r["build_status"] == "pass")
+    atx_success = sum(1 for r in results if r.get("atx_status") == "success")
 
     lines = [
         "# Benchmark Results\n",
         f"> Last updated: {now}\n",
-        f"**{success}/{total}** transformations succeeded | **{builds}/{total}** builds passed\n",
+        f"**{success}/{total}** transformations succeeded | **{builds}/{total}** builds passed | **{atx_success}/{total}** ATX reported success\n",
     ]
 
     # Total cost
@@ -85,7 +86,7 @@ def generate_markdown(results):
         lines.append(f"- **Cost**: {r.get('cost', 'N/A')}")
         lines.append(f"- **Knowledge items**: {r['knowledge_items']}")
 
-        # Include build log snippet if exists
+        # Build log snippet on failure
         build_log = os.path.join(RESULTS_DIR, f"{name}_build.log")
         if os.path.exists(build_log) and r["build_status"] == "fail":
             with open(build_log) as f:
@@ -94,8 +95,35 @@ def generate_markdown(results):
             lines.append("```")
             lines.extend(l.rstrip() for l in tail)
             lines.append("```\n</details>\n")
-        else:
+
+        # Validation criteria
+        criteria = r.get("criteria", {})
+        if criteria:
             lines.append("")
+            lines.append("| Criterion | Status | Detail |")
+            lines.append("|-----------|--------|--------|")
+            for key, val in criteria.items():
+                icon = {"PASS": "✅", "FAIL": "❌", "SKIP": "⏭️", "N/A": "➖"}.get(val.get("status", ""), "❓")
+                lines.append(f"| {key} | {icon} {val.get('status', '')} | {val.get('detail', '')} |")
+
+        # Issues and manual fixes
+        issues = r.get("issues_encountered", [])
+        if issues:
+            lines.append(f"\n**Issues encountered**: {len(issues)}")
+            for issue in issues:
+                lines.append(f"- {issue}")
+
+        fixes = r.get("manual_fixes_needed", [])
+        if fixes:
+            lines.append(f"\n**Manual fixes needed**: {len(fixes)}")
+            for fix in fixes:
+                lines.append(f"- {fix}")
+
+        plugins = r.get("plugins_migrated", [])
+        if plugins:
+            lines.append(f"\n**Plugins migrated**: {', '.join(plugins)}")
+
+        lines.append("")
 
     return "\n".join(lines)
 
