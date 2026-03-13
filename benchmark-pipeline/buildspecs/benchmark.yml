@@ -9,6 +9,7 @@ phases:
       - pip install pyyaml
       - npm install -g aws-cdk
       - curl -fsSL https://transform-cli.awsstatic.com/install.sh | bash
+      - export PATH="$HOME/.local/bin:$PATH"
       - atx --version
       - export ATX_SHELL_TIMEOUT=1800
   build:
