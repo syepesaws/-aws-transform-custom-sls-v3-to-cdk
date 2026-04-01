@@ -2,36 +2,68 @@
   "repo": "Serverless-Boilerplate-Express-TypeScript",
   "url": "https://github.com/ixartz/Serverless-Boilerplate-Express-TypeScript",
   "stars": "571",
-  "loc": 263,
   "transformation_status": "success",
   "atx_status": "success",
   "failure_reason": "",
   "build_status": "pass",
-  "duration_seconds": 1276,
-  "agent_minutes": "47.58",
-  "cost": "$1.67",
-  "knowledge_items": "2",
-  "conversation_id": "20260401_171636_1634dc5c",
-  "timestamp": "2026-04-01T17:38:04Z",
-  "criteria": {},
-  "issues_encountered": [],
-  "manual_fixes_needed": [],
-  "plugins_migrated": [],
-  "functions_count": "N/A",
-  "cdk_quality": {
-    "l2_constructs": 0,
-    "cfn_escape_hatches": 3,
-    "todo_comments": 0,
-    "unused_imports": 0,
-    "total_ts_files": 8,
-    "total_ts_loc": 263,
-    "cdk_stack_files": [
-      "lib/serverless-boilerplate-stack.ts"
-    ],
-    "constructs_used": [],
-    "issues": [
-      "lib/serverless-boilerplate-stack.ts: 3 CfnResource/escape hatch(es)"
-    ],
-    "l2_ratio": 0.0
-  }
+  "duration_seconds": 1566,
+  "agent_minutes": "N/A",
+  "cost": "N/A",
+  "knowledge_items": "N/A",
+  "conversation_id": "",
+  "timestamp": "2026-04-01T21:20:10Z",
+  "criteria": {
+    "cdk_synth": {
+      "status": "PASS",
+      "detail": "npx cdk synth succeeds from clean install state. Generates CloudFormation template with all expected resources: Lambda function, IAM roles, HTTP API Gateway v2, routes, log groups."
+    },
+    "lambda_functions": {
+      "status": "PASS",
+      "detail": "1 Lambda function (app) migrated with NodejsFunction construct. Config: entry=src/handler.ts, handler=handler, runtime=nodejs18.x, memorySize=512, timeout=10s, functionName=serverless-boilerplate-${stage}-app. Prisma Client bundled via nodeModules and commandHooks."
+    },
+    "api_gateway": {
+      "status": "PASS",
+      "detail": "HTTP API (API Gateway v2) created with HttpApi construct. CORS enabled (allowOrigins=*, allowMethods=ANY, allowHeaders=*). Routes: /{proxy+} ANY and / ANY with HttpLambdaIntegration. Access logging configured with LogGroup."
+    },
+    "iam_permissions": {
+      "status": "PASS",
+      "detail": "Per-function IAM role created by CDK default behavior (replaces serverless-iam-roles-per-function). X-Ray tracing permissions automatically added. Lambda execution role with AWSLambdaBasicExecutionRole managed policy."
+    },
+    "environment_variables": {
+      "status": "PASS",
+      "detail": "NODE_ENV set based on stage (prod=production, otherwise=development). DATABASE_URL passed through from process.env at deploy time (replaces serverless-dotenv-plugin)."
+    },
+    "event_sources": {
+      "status": "N/A",
+      "detail": "No non-HTTP event sources in the original serverless.yml. Only httpApi events which are covered by the api_gateway criterion."
+    },
+    "no_serverless_deps": {
+      "status": "PASS",
+      "detail": "All Serverless Framework dependencies removed: serverless, serverless-esbuild, serverless-offline, serverless-dotenv-plugin. Only serverless-http remains as a runtime dependency (used by Lambda handler code, not a Serverless Framework plugin)."
+    },
+    "cdk_json": {
+      "status": "PASS",
+      "detail": "cdk.json created with app entry point (ts-node with commonjs compiler option), CDK feature flags, context values for stage and region."
+    },
+    "clean_install": {
+      "status": "PASS",
+      "detail": "Clean install (rm node_modules + package-lock.json, npm install) succeeded. npx cdk synth verified from clean state."
+    }
+  },
+  "issues_encountered": [
+    "ts-node failed with ERR_UNKNOWN_FILE_EXTENSION because tsconfig.json uses module:esnext. Fixed by adding --compiler-options '{\"module\":\"commonjs\"}' to ts-node command in cdk.json.",
+    "Docker not available in build environment. Used forceDockerBundling:false and installed esbuild as devDependency for local bundling.",
+    "logRetention property deprecated in CDK (use logGroup instead). Kept logRetention as it still works in current CDK version."
+  ],
+  "manual_fixes_needed": [
+    "DATABASE_URL environment variable must be set at deploy time (e.g., via CDK context or CI/CD pipeline env vars)",
+    "AWS SAM CLI must be installed for local development (npm run dev:server)",
+    "CDK bootstrap may be needed for first deployment: npx cdk bootstrap aws://ACCOUNT-NUMBER/REGION"
+  ],
+  "plugins_migrated": [
+    "serverless-esbuild -> NodejsFunction bundling (esbuild built-in)",
+    "serverless-offline -> AWS SAM CLI (sam local start-api)",
+    "serverless-dotenv-plugin -> process.env at CDK synth/deploy time"
+  ],
+  "functions_count": 1
 }

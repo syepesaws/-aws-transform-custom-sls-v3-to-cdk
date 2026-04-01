@@ -2,40 +2,72 @@
   "repo": "serverless-react-boilerplate",
   "url": "https://github.com/arabold/serverless-react-boilerplate",
   "stars": "245",
-  "loc": 229,
   "transformation_status": "success",
   "atx_status": "success",
   "failure_reason": "",
   "build_status": "pass",
-  "duration_seconds": 1364,
-  "agent_minutes": "55.14",
-  "cost": "$1.93",
-  "knowledge_items": "2",
-  "conversation_id": "20260401_171610_2eaf7d0a",
-  "timestamp": "2026-04-01T17:39:15Z",
-  "criteria": {},
-  "issues_encountered": [],
-  "manual_fixes_needed": [],
-  "plugins_migrated": [],
-  "functions_count": "N/A",
-  "cdk_quality": {
-    "l2_constructs": 3,
-    "cfn_escape_hatches": 4,
-    "todo_comments": 1,
-    "unused_imports": 0,
-    "total_ts_files": 5,
-    "total_ts_loc": 229,
-    "cdk_stack_files": [
-      "lib/serverless-react-boilerplate-stack.ts"
-    ],
-    "constructs_used": [
-      "Bucket",
-      "Function",
-      "RestApi"
-    ],
-    "issues": [
-      "lib/serverless-react-boilerplate-stack.ts: 4 CfnResource/escape hatch(es)"
-    ],
-    "l2_ratio": 0.43
-  }
+  "duration_seconds": 2127,
+  "agent_minutes": "N/A",
+  "cost": "N/A",
+  "knowledge_items": "N/A",
+  "conversation_id": "",
+  "timestamp": "2026-04-01T21:20:32Z",
+  "criteria": {
+    "cdk_synth": {
+      "status": "PASS",
+      "detail": "npx cdk synth completes successfully after clean install, producing 27 CloudFormation resources including Lambda function, API Gateway REST API, S3 bucket, bucket deployment, and supporting IAM roles."
+    },
+    "lambda_functions": {
+      "status": "PASS",
+      "detail": "1 serve function migrated using NodejsFunction with esbuild bundling. Configured with: runtime nodejs18.x (upgraded from EOL nodejs12.x), memorySize 512, timeout 6s, logRetention 7 days. Esbuild loaders handle CSS (empty) and images (dataurl). Browser webpack build runs in beforeBundling hook to generate dist/stats.json."
+    },
+    "api_gateway": {
+      "status": "PASS",
+      "detail": "RestApi created with restApiName matching original, minimumCompressionSize 1000, CORS enabled. Routes: root / ANY and /{any+} ANY with LambdaIntegration, matching original serverless.yml configuration."
+    },
+    "iam_permissions": {
+      "status": "PASS",
+      "detail": "CDK creates per-function IAM roles by default (no custom IAM statements needed as original serverless.yml had no provider.iam.role.statements). Lambda function has AWSLambdaBasicExecutionRole managed policy."
+    },
+    "environment_variables": {
+      "status": "PASS",
+      "detail": "All 6 environment variables mapped: SERVERLESS_PROJECT (string), SERVERLESS_REGION (this.region), SERVERLESS_STAGE (stage context), APP_DIST_URL (bucket regional domain name), APP_PUBLIC_URL (bucket regional domain name), APIGATEWAY_URL (api.url with Fn::Join)."
+    },
+    "event_sources": {
+      "status": "N/A",
+      "detail": "No non-HTTP event sources in the original serverless.yml. Only HTTP events (/ ANY and /{any+} ANY) which are handled by API Gateway configuration."
+    },
+    "no_serverless_deps": {
+      "status": "PASS",
+      "detail": "All serverless dependencies removed from package.json: serverless, serverless-webpack, serverless-offline, serverless-plugin-scripts, serverless-s3-deploy, @types/serverless. No serverless-related packages remain in dependencies or devDependencies."
+    },
+    "cdk_json": {
+      "status": "PASS",
+      "detail": "cdk.json exists with valid JSON, app entry point set to 'npx ts-node --prefer-ts-exts lib/cdk-app.ts', CDK feature flags configured, watch configuration set."
+    },
+    "clean_install": {
+      "status": "PASS",
+      "detail": "npm install --legacy-peer-deps succeeds from clean state (node_modules and package-lock.json deleted first). 854 packages installed. --legacy-peer-deps required due to @pmmmwh/react-refresh-webpack-plugin peer dependency conflicts."
+    }
+  },
+  "issues_encountered": [
+    "Docker not available in build environment - resolved by installing esbuild locally as devDependency for NodejsFunction local bundling",
+    "React SSR app imports .css files (via null-loader in webpack) and .svg files (via url-loader) - resolved using esbuild loaders: '.css': 'empty', '.svg': 'dataurl'",
+    "src/server/render.tsx dynamically imports ../../dist/stats.json (browser webpack build artifact) - resolved by running browser webpack build in beforeBundling commandHook",
+    "S3 bucket CORS needs to reference API Gateway URL but bucket is created first - resolved using CfnBucket escape hatch with Fn::Join for dynamic CORS origin",
+    "npm install requires --legacy-peer-deps due to react-refresh-webpack-plugin peer dependency conflicts",
+    "logRetention property is deprecated in favor of logGroup - noted as warning, still functional"
+  ],
+  "manual_fixes_needed": [
+    "AWS CDK bootstrap required before first deployment: npx cdk bootstrap",
+    "npm run build:browser must run before cdk synth (handled by package.json scripts and beforeBundling hook)",
+    "Runtime upgraded from nodejs12.x to nodejs18.x - verify application compatibility"
+  ],
+  "plugins_migrated": [
+    "serverless-webpack \u2192 NodejsFunction with esbuild bundling (10-100x faster)",
+    "serverless-plugin-scripts \u2192 esbuild commandHooks.beforeBundling (browser build)",
+    "serverless-s3-deploy \u2192 BucketDeployment construct with CacheControl",
+    "serverless-offline \u2192 AWS SAM CLI (sam local start-api)"
+  ],
+  "functions_count": 1
 }

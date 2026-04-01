@@ -144,13 +144,16 @@ For plugins not listed: document them in the validation report as unsupported an
 2. Update `README.md` to reflect CDK commands (`cdk synth`, `cdk deploy`, `cdk diff`) instead of `serverless deploy`
 3. **If CI/CD config exists**: Replace `serverless deploy` with `cdk synth && cdk deploy`
 
-### 10. Final Validation
+### 10. Final Validation and Cleanup
 
 1. Remove `node_modules` and `package-lock.json`, run `npm install` from clean state
 2. Run `npx cdk synth` — must succeed with zero errors
 3. Verify no `serverless` dependencies remain in `package.json`
 4. Verify `cdk.json` is properly configured
 5. Write the `validation_report.json` (see below)
+6. **CRITICAL: Clean up build artifacts** — after writing `validation_report.json`, delete the following directories to reduce upload size:
+   - `node_modules/`
+   - `cdk.out/`
 
 ## Constraints and Guardrails
 

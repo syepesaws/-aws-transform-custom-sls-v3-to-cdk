@@ -130,7 +130,7 @@ def main():
     if not os.path.isdir(WORK_DIR):
         sys.exit(f"No .workdir/ found. Run benchmarks locally first, or use --path.")
 
-    repos = [args.repo] if args.repo else [d for d in os.listdir(WORK_DIR) if os.path.isdir(os.path.join(WORK_DIR, d))]
+    repos = [args.repo] if args.repo else [d for d in os.listdir(WORK_DIR) if os.path.isdir(os.path.join(WORK_DIR, d)) and not d.startswith(".")]
 
     for name in sorted(repos):
         repo_dir = os.path.join(WORK_DIR, name)

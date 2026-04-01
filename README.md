@@ -7,26 +7,27 @@ Benchmarking suite for evaluating [AWS Transform Custom](https://docs.aws.amazon
 ```
 transformation-definitions/
   td-sls-v3-to-cdk/          # ATX transformation definition (publishable)
-examples/                     # Sample repos for manual testing
-benchmark-results/            # Per-repo JSON results + aggregated report
+batch-infrastructure/         # CDK stack for AWS Batch + Fargate Spot
+benchmark-results/            # Per-repo JSON results
 scripts/
   scrape_repos.py             # GitHub search for candidate repos
-  run_benchmark.py            # ATX execution wrapper with telemetry
+  submit_batch.py             # Submit benchmark jobs to AWS Batch
+  sync_batch_results.py       # Download validation reports from S3
   aggregate_results.py        # Parse results → BENCHMARKS.md
   analyze_cdk_quality.py      # Static analysis of generated CDK code
+  compare_runs.py             # Regression tracking across runs
   log_fixes.py                # Track manual fixes per repo
-  compare_runs.py             # Regression tracking across pipeline runs
-  sync_results.py             # Download results from S3
 config.yaml                   # Repo candidates + benchmark parameters
+dashboard.py                  # Streamlit dashboard for monitoring
 BENCHMARKS.md                 # Results summary
 ```
 
 ## Prerequisites
 
 - AWS Transform CLI (`atx`) installed and configured
-- Python 3.9+ with `requests` (`pip install requests`)
-- GitHub personal access token (for API search) exported as `GITHUB_TOKEN`
-- `jq`, `git`
+- Python 3.9+ with `pyyaml`, `streamlit`
+- GitHub personal access token exported as `GITHUB_TOKEN` (for repo discovery)
+- AWS CLI configured with a profile that has Batch + S3 access
 
 ## Quick Start
 
@@ -36,83 +37,74 @@ python scripts/scrape_repos.py
 
 # 2. Review/edit config.yaml with selected repos
 
-# 3. Publish the transformation definition (or use a draft)
+# 3. Publish the transformation definition
 atx custom def publish -n sls-v3-to-cdk \
   --description "Serverless Framework v3 to AWS CDK TypeScript" \
   --sd transformation-definitions/td-sls-v3-to-cdk
 
-# 4. Run benchmarks
-python scripts/run_benchmark.py
+# 4. Deploy Batch infrastructure (first time only)
+cd batch-infrastructure && npm install
+npx cdk deploy
 
-# 5. Aggregate results
-python scripts/aggregate_results.py
+# 5. Submit benchmark jobs
+python scripts/submit_batch.py --profile demo
+
+# 6. Monitor progress
+python scripts/submit_batch.py --profile demo --status --wait
+
+# 7. Sync results and generate report
+python scripts/sync_batch_results.py --profile demo
 ```
+
+## Dashboard
+
+```bash
+AWS_PROFILE=demo streamlit run dashboard.py
+```
+
+Features:
+- **Live Status** — real-time Batch job monitoring with auto-refresh
+- **Results** — benchmark summary with criteria scores, plugins migrated, issues
+- **CDK Quality** — L2 vs CfnResource analysis, construct inventory
+- **Compare Runs** — regression tracking across executions
+- **Log Viewer** — paginated CloudWatch logs per repo with live tail
+
+## Architecture
+
+```
+AWS Batch (Fargate Spot)
+  ├─ 1 job per repo (parallel)
+  │   └─ Public ATX container: clone → atx exec → upload to S3
+  └─ Results: validation_report.json per repo in S3
+```
+
+- **No pipeline** — submit jobs on demand, no infra changes when adding repos
+- **Fargate Spot** — ~70% cheaper than on-demand
+- **Per-repo retry** — resubmit individual repos without re-running everything
 
 ## Benchmark Metrics
 
-Each execution captures:
-- Transformation success/failure status
-- Build/validation command output (`cdk synth`)
-- Time taken (wall clock)
-- Agent minutes consumed
-- Knowledge items generated
-- Manual fixes required
-- Code quality observations
+Each execution captures (via `validation_report.json`):
+- Transformation status and per-criterion pass/fail
+- Functions count and plugins migrated
+- Issues encountered and manual fixes needed
+- Duration (from Batch job timestamps)
 
 ## Post-Run Analysis
 
 ```bash
-# CDK code quality analysis (L2 vs CfnResource, TODOs, construct usage)
-python scripts/analyze_cdk_quality.py                     # all repos in .workdir/
-python scripts/analyze_cdk_quality.py --repo <name>       # single repo
+# Sync results from latest Batch run
+python scripts/sync_batch_results.py --profile demo
+
+# Compare runs for regression tracking
+python scripts/compare_runs.py --profile demo
+
+# CDK code quality analysis (requires --download on sync)
+python scripts/sync_batch_results.py --profile demo --download
+python scripts/analyze_cdk_quality.py
 
 # Log manual fixes after reviewing a transformation
 python scripts/log_fixes.py <repo> --fix "Description" --category iam
-python scripts/log_fixes.py <repo> --issue "Description"
-python scripts/log_fixes.py <repo> --show
-
-# Compare runs for regression tracking (reads from S3)
-python scripts/compare_runs.py --profile demo                              # latest vs previous
-python scripts/compare_runs.py --profile demo --baseline <id> --current <id>
-```
-
-## Pipeline (CodeBuild / CodePipeline)
-
-For parallelized remote execution, a CDK project is provided in `benchmark-pipeline/`.
-
-### Architecture
-
-```
-CodePipeline
-  ├─ Source: GitLab (CodeConnection)
-  ├─ Benchmark: 5 parallel CodeBuild actions (one per repo)
-  │   └─ Each: clone → atx exec → build validation → upload to S3
-  └─ Aggregate: collect results → generate BENCHMARKS.md → upload to S3
-```
-
-### Deploy
-
-```bash
-# 1. Create a CodeConnection to GitLab in the AWS Console and note the ARN
-
-# 2. Deploy the pipeline stack
-cd benchmark-pipeline
-npm install
-npx cdk deploy --parameters ConnectionArn=arn:aws:codeconnections:REGION:ACCOUNT:connection/ID
-
-# 3. Approve the CodeConnection in the AWS Console (pending status after first deploy)
-```
-
-### S3 Results Structure
-
-```
-s3://benchmark-bucket/
-  runs/<timestamp>/
-    <repo-name>/result.json    # benchmark metrics
-    <repo-name>/atx.log        # full ATX output
-    <repo-name>/build.log      # build validation output
-    BENCHMARKS.md              # aggregated report
-  latest/BENCHMARKS.md         # always points to most recent run
 ```
 
 See [BENCHMARKS.md](BENCHMARKS.md) for latest results.

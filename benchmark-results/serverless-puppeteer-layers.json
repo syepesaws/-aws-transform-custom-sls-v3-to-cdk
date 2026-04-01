@@ -2,38 +2,64 @@
   "repo": "serverless-puppeteer-layers",
   "url": "https://github.com/RafalWilinski/serverless-puppeteer-layers",
   "stars": "272",
-  "loc": 93,
   "transformation_status": "success",
   "atx_status": "success",
   "failure_reason": "",
   "build_status": "pass",
-  "duration_seconds": 1081,
-  "agent_minutes": "34.36",
-  "cost": "$1.20",
-  "knowledge_items": "2",
-  "conversation_id": "20260401_171636_be981224",
-  "timestamp": "2026-04-01T17:34:48Z",
-  "criteria": {},
-  "issues_encountered": [],
+  "duration_seconds": 1326,
+  "agent_minutes": "N/A",
+  "cost": "N/A",
+  "knowledge_items": "N/A",
+  "conversation_id": "",
+  "timestamp": "2026-04-01T21:20:28Z",
+  "criteria": {
+    "cdk_synth": {
+      "status": "PASS",
+      "detail": "npx cdk synth completes successfully with exit code 0. CloudFormation template includes Lambda function, Lambda layer, API Gateway REST API with binary media types, and all supporting resources."
+    },
+    "lambda_functions": {
+      "status": "PASS",
+      "detail": "1 Lambda function (puppeteer-orchestrator) migrated using NodejsFunction with esbuild bundling. Configured with NODEJS_18_X runtime, 2048MB memory, 30s timeout, Chrome layer attached, X-Ray tracing enabled, 1 month log retention."
+    },
+    "api_gateway": {
+      "status": "PASS",
+      "detail": "REST API Gateway created with binaryMediaTypes: ['*/*'] (replacing serverless-apigw-binary and serverless-apigwy-binary plugins). GET /screenshot endpoint configured with LambdaIntegration and ContentHandling.CONVERT_TO_BINARY."
+    },
+    "iam_permissions": {
+      "status": "PASS",
+      "detail": "Default Lambda execution role created by CDK (AWSLambdaBasicExecutionRole). No custom IAM statements in original serverless.yml, so no additional permissions needed. X-Ray write policy added for tracing."
+    },
+    "environment_variables": {
+      "status": "N/A",
+      "detail": "No environment variables defined in original serverless.yml provider or function configuration."
+    },
+    "event_sources": {
+      "status": "N/A",
+      "detail": "Only HTTP events present (GET /screenshot). No SQS, SNS, DynamoDB Streams, S3, Schedule, or EventBridge event sources in original configuration."
+    },
+    "no_serverless_deps": {
+      "status": "PASS",
+      "detail": "No serverless framework dependencies in package.json. Removed serverless-apigw-binary (0.4.4) and serverless-apigwy-binary (0.1.0). No 'serverless' CLI dependency present."
+    },
+    "cdk_json": {
+      "status": "PASS",
+      "detail": "cdk.json properly configured with app entry point (npx ts-node --prefer-ts-exts bin/app.ts), CDK feature flags, and exclude patterns."
+    },
+    "clean_install": {
+      "status": "PASS",
+      "detail": "Clean npm install (rm -rf node_modules package-lock.json && npm install) succeeds. All dependencies resolve correctly from standard npm registry."
+    }
+  },
+  "issues_encountered": [
+    "Docker not available in build environment - configured forceDockerBundling: false to use local esbuild instead",
+    "nodejs10.x runtime is EOL - upgraded to nodejs18.x as specified in plan",
+    "chrome-aws-lambda and puppeteer-core must be externalized from esbuild bundling since they are provided by the Lambda layer at runtime",
+    "logRetention property shows deprecation warning in CDK - cosmetic only, does not affect functionality"
+  ],
   "manual_fixes_needed": [],
-  "plugins_migrated": [],
-  "functions_count": "N/A",
-  "cdk_quality": {
-    "l2_constructs": 1,
-    "cfn_escape_hatches": 3,
-    "todo_comments": 0,
-    "unused_imports": 0,
-    "total_ts_files": 2,
-    "total_ts_loc": 93,
-    "cdk_stack_files": [
-      "lib/serverless-puppeteer-layers-stack.ts"
-    ],
-    "constructs_used": [
-      "RestApi"
-    ],
-    "issues": [
-      "lib/serverless-puppeteer-layers-stack.ts: 3 CfnResource/escape hatch(es)"
-    ],
-    "l2_ratio": 0.25
-  }
+  "plugins_migrated": [
+    "serverless-apigw-binary (replaced by binaryMediaTypes property on RestApi)",
+    "serverless-apigwy-binary (replaced by binaryMediaTypes property on RestApi)"
+  ],
+  "functions_count": 1
 }

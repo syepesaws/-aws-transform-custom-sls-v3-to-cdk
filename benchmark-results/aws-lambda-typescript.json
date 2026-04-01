@@ -2,36 +2,70 @@
   "repo": "aws-lambda-typescript",
   "url": "https://github.com/balassy/aws-lambda-typescript",
   "stars": "265",
-  "loc": 1469,
   "transformation_status": "success",
   "atx_status": "success",
   "failure_reason": "",
   "build_status": "pass",
-  "duration_seconds": 1195,
-  "agent_minutes": "46.02",
-  "cost": "$1.61",
-  "knowledge_items": "2",
-  "conversation_id": "20260401_171610_b736db90",
-  "timestamp": "2026-04-01T17:36:15Z",
-  "criteria": {},
-  "issues_encountered": [],
-  "manual_fixes_needed": [],
-  "plugins_migrated": [],
-  "functions_count": "N/A",
-  "cdk_quality": {
-    "l2_constructs": 0,
-    "cfn_escape_hatches": 5,
-    "todo_comments": 1,
-    "unused_imports": 0,
-    "total_ts_files": 31,
-    "total_ts_loc": 1469,
-    "cdk_stack_files": [
-      "lib/serverless-sample-stack.ts"
-    ],
-    "constructs_used": [],
-    "issues": [
-      "lib/serverless-sample-stack.ts: 5 CfnResource/escape hatch(es)"
-    ],
-    "l2_ratio": 0.0
-  }
+  "duration_seconds": 1814,
+  "agent_minutes": "N/A",
+  "cost": "N/A",
+  "knowledge_items": "N/A",
+  "conversation_id": "",
+  "timestamp": "2026-04-01T21:20:14Z",
+  "criteria": {
+    "cdk_synth": {
+      "status": "PASS",
+      "detail": "npx cdk synth completes successfully after clean install, generating valid CloudFormation template with all resources"
+    },
+    "lambda_functions": {
+      "status": "PASS",
+      "detail": "All 4 functions migrated: getSwaggerJson, getHealthCheck, getHealthCheckDetailed, getCity. Each uses NodejsFunction with esbuild bundling, Runtime.NODEJS_18_X, Tracing.ACTIVE, and logRetention ONE_MONTH"
+    },
+    "api_gateway": {
+      "status": "PASS",
+      "detail": "RestApi created with CORS (ALL_ORIGINS, ALL_METHODS). Routes: GET /swagger.json, GET /health/check, GET /health/detailed, GET /cities/{id}. All use LambdaIntegration"
+    },
+    "iam_permissions": {
+      "status": "PASS",
+      "detail": "Each function gets its own IAM role (CDK default). getSwaggerJson has additional apigateway:GET policy. X-Ray tracing permissions auto-added"
+    },
+    "environment_variables": {
+      "status": "PASS",
+      "detail": "getSwaggerJson: REGION_NAME, REST_API_NAME, STAGE_NAME, API_INFO_VERSION, API_INFO_TITLE. getCity: DEFAULT_COUNTRY=Hungary. All serverless variable references (${self:*}) replaced with CDK equivalents"
+    },
+    "event_sources": {
+      "status": "N/A",
+      "detail": "No non-HTTP event sources in the original serverless.yml. All events are HTTP (API Gateway REST API)"
+    },
+    "no_serverless_deps": {
+      "status": "PASS",
+      "detail": "No serverless or serverless-* dependencies remain in package.json. Removed: serverless-plugin-typescript, serverless-offline, serverless-aws-documentation, serverless-domain-manager, serverless-stack-output"
+    },
+    "cdk_json": {
+      "status": "PASS",
+      "detail": "cdk.json exists with correct app entry point (npx ts-node --prefer-ts-exts bin/app.ts), CDK feature flags, and watch configuration"
+    },
+    "clean_install": {
+      "status": "PASS",
+      "detail": "rm -rf node_modules package-lock.json && npm install && npx cdk synth all pass without errors"
+    }
+  },
+  "issues_encountered": [
+    "TypeScript noUnusedLocals caused TS6133 errors for Lambda function variables before API Gateway step - resolved by making functions public class properties",
+    "Docker not available in build environment - resolved with forceDockerBundling: false and esbuild as local devDependency",
+    "AWS SDK v2 not included in Node 18 Lambda runtime - changed externalModules from ['aws-sdk'] to ['@aws-sdk/*'] so aws-sdk v2 gets bundled for swagger handler",
+    "logRetention property deprecated in aws-cdk-lib - generates deprecation warning but still functional"
+  ],
+  "manual_fixes_needed": [
+    "Custom domain setup requires manual configuration: ACM certificate ARN and Route53 hosted zone ID must be provided in lib/serverless-sample-stack.ts (commented-out code section)",
+    "serverless-aws-documentation plugin has no CDK equivalent - Swagger documentation via API Gateway annotations is not available. The /swagger.json endpoint still works via the Lambda function"
+  ],
+  "plugins_migrated": [
+    "serverless-plugin-typescript (replaced by NodejsFunction esbuild bundling)",
+    "serverless-domain-manager (commented-out CDK equivalent with DomainName, Certificate, Route53 ARecord)",
+    "serverless-offline (replaced by AWS SAM CLI - sam local start-api)",
+    "serverless-iam-roles-per-function (implicit - CDK creates per-function IAM roles by default)",
+    "serverless-stack-output (replaced by CDK CfnOutput)"
+  ],
+  "functions_count": 4
 }
