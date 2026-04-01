@@ -1,13 +1,41 @@
 {
   "repo": "serverless-react-boilerplate",
   "url": "https://github.com/arabold/serverless-react-boilerplate",
+  "stars": "245",
+  "loc": 229,
   "transformation_status": "success",
+  "atx_status": "success",
   "failure_reason": "",
   "build_status": "pass",
-  "duration_seconds": 2100,
-  "agent_minutes": "84.98",
-  "cost": "$2.97",
+  "duration_seconds": 1364,
+  "agent_minutes": "55.14",
+  "cost": "$1.93",
   "knowledge_items": "2",
-  "conversation_id": "20260313_165311_9556e029",
-  "timestamp": "2026-03-13T17:28:23Z"
+  "conversation_id": "20260401_171610_2eaf7d0a",
+  "timestamp": "2026-04-01T17:39:15Z",
+  "criteria": {},
+  "issues_encountered": [],
+  "manual_fixes_needed": [],
+  "plugins_migrated": [],
+  "functions_count": "N/A",
+  "cdk_quality": {
+    "l2_constructs": 3,
+    "cfn_escape_hatches": 4,
+    "todo_comments": 1,
+    "unused_imports": 0,
+    "total_ts_files": 5,
+    "total_ts_loc": 229,
+    "cdk_stack_files": [
+      "lib/serverless-react-boilerplate-stack.ts"
+    ],
+    "constructs_used": [
+      "Bucket",
+      "Function",
+      "RestApi"
+    ],
+    "issues": [
+      "lib/serverless-react-boilerplate-stack.ts: 4 CfnResource/escape hatch(es)"
+    ],
+    "l2_ratio": 0.43
+  }
 }

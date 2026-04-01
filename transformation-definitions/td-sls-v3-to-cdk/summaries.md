@@ -1,7 +1,6 @@
- 
 ## Reference Documentation
 
-* **document_references/README.md**: Quick reference mapping of Serverless plugins to CDK equivalents with core transformation guides index
+* **document_references/README.md**: Quick reference mapping of Serverless plugins to CDK equivalents with core transformation guides index and common code patterns (NodejsFunction, API Gateway with custom domain)
 
 * **document_references/07-lambda-apigateway-events-transformation.md**: Comprehensive guide for transforming Lambda functions, API Gateway HTTP events, and event sources from Serverless to CDK. Covers NodejsFunction configuration, RestApi setup, path/method mapping, CORS, event source mappings (DynamoDB Streams, SQS, SNS, S3, EventBridge), environment variables, VPC, layers, DLQ, and reserved concurrency with complete code examples
 

@@ -1,20 +1,20 @@
 # Benchmark Results
 
-> Last updated: 2026-04-01 17:11 UTC
+> Last updated: 2026-04-01 17:47 UTC
 
-**5/5** succeeded | **0/5** partial | **5/5** builds passed | **0/5** ATX reported success
+**5/5** succeeded | **0/5** partial | **5/5** builds passed | **5/5** ATX reported success
 
-**Total agent minutes**: 305.16 | **Total cost**: $10.68 (@ $0.035/min)
+**Total agent minutes**: 250.93 | **Total cost**: $8.78 (@ $0.035/min)
 
 ## Summary
 
 | Repository | Stars | LOC | Fns | Plugins | Status | Score | Build | Time (s) | Agent Min | Cost | KIs |
 |------------|-------|-----|-----|---------|--------|-------|-------|----------|-----------|------|-----|
-| [Serverless-Boilerplate-Express-TypeScript](https://github.com/ixartz/Serverless-Boilerplate-Express-TypeScript) | 571 | N/A | N/A | 3 | ✅ | 2/2 | ✅ | 1628 | 52.91 | $1.85 | 2 |
-| [aws-lambda-typescript](https://github.com/balassy/aws-lambda-typescript) | 265 | N/A | N/A | 5 | ✅ | 2/2 | ✅ | 2144 | 64.21 | $2.25 | 2 |
-| [serverless-architecture-boilerplate](https://github.com/msfidelis/serverless-architecture-boilerplate) | 391 | N/A | N/A | 5 | ✅ | 2/2 | ✅ | 1829 | 76.41 | $2.67 | 2 |
-| [serverless-puppeteer-layers](https://github.com/RafalWilinski/serverless-puppeteer-layers) | 272 | N/A | N/A | 2 | ✅ | 2/2 | ✅ | 1204 | 26.65 | $0.93 | 2 |
-| [serverless-react-boilerplate](https://github.com/arabold/serverless-react-boilerplate) | 245 | N/A | N/A | 4 | ✅ | 2/2 | ✅ | 2100 | 84.98 | $2.97 | 2 |
+| [Serverless-Boilerplate-Express-TypeScript](https://github.com/ixartz/Serverless-Boilerplate-Express-TypeScript) | 571 | 263 | N/A | 0 | ✅ | 2/2 | ✅ | 1276 | 47.58 | $1.67 | 2 |
+| [aws-lambda-typescript](https://github.com/balassy/aws-lambda-typescript) | 265 | 1469 | N/A | 0 | ✅ | 2/2 | ✅ | 1195 | 46.02 | $1.61 | 2 |
+| [serverless-architecture-boilerplate](https://github.com/msfidelis/serverless-architecture-boilerplate) | 391 | 292 | N/A | 0 | ✅ | 2/2 | ✅ | 1443 | 67.83 | $2.37 | 2 |
+| [serverless-puppeteer-layers](https://github.com/RafalWilinski/serverless-puppeteer-layers) | 272 | 93 | N/A | 0 | ✅ | 2/2 | ✅ | 1081 | 34.36 | $1.20 | 2 |
+| [serverless-react-boilerplate](https://github.com/arabold/serverless-react-boilerplate) | 245 | 229 | N/A | 0 | ✅ | 2/2 | ✅ | 1364 | 55.14 | $1.93 | 2 |
 
 ## Detailed Results
 
@@ -22,73 +22,90 @@
 
 - **URL**: https://github.com/ixartz/Serverless-Boilerplate-Express-TypeScript
 - **Stars**: 571
-- **LOC**: N/A
+- **LOC**: 263
 - **Status**: ✅ success
 - **Validation score**: 2/2 criteria passed → ✅ success
 - **Build**: ✅ pass
-- **Time taken**: 1628s
-- **Agent minutes**: 52.91
-- **Cost**: $1.85
+- **Time taken**: 1276s
+- **Agent minutes**: 47.58
+- **Cost**: $1.67
 - **Knowledge items**: 2
 
-**Plugins migrated**: serverless-dotenv-plugin, serverless-esbuild, serverless-offline
+**CDK Quality**:
+- L2 constructs: 0 | Cfn escape hatches: 3 | L2 ratio: 0.0
+- TODO/FIXME comments: 0
+- ⚠️ lib/serverless-boilerplate-stack.ts: 3 CfnResource/escape hatch(es)
 
 ### aws-lambda-typescript
 
 - **URL**: https://github.com/balassy/aws-lambda-typescript
 - **Stars**: 265
-- **LOC**: N/A
+- **LOC**: 1469
 - **Status**: ✅ success
 - **Validation score**: 2/2 criteria passed → ✅ success
 - **Build**: ✅ pass
-- **Time taken**: 2144s
-- **Agent minutes**: 64.21
-- **Cost**: $2.25
+- **Time taken**: 1195s
+- **Agent minutes**: 46.02
+- **Cost**: $1.61
 - **Knowledge items**: 2
 
-**Plugins migrated**: serverless-plugin-typescript, serverless-offline, serverless-aws-documentation, serverless-domain-manager, serverless-stack-output
+**CDK Quality**:
+- L2 constructs: 0 | Cfn escape hatches: 5 | L2 ratio: 0.0
+- TODO/FIXME comments: 1
+- ⚠️ lib/serverless-sample-stack.ts: 5 CfnResource/escape hatch(es)
 
 ### serverless-architecture-boilerplate
 
 - **URL**: https://github.com/msfidelis/serverless-architecture-boilerplate
 - **Stars**: 391
-- **LOC**: N/A
+- **LOC**: 292
 - **Status**: ✅ success
 - **Validation score**: 2/2 criteria passed → ✅ success
 - **Build**: ✅ pass
-- **Time taken**: 1829s
-- **Agent minutes**: 76.41
-- **Cost**: $2.67
+- **Time taken**: 1443s
+- **Agent minutes**: 67.83
+- **Cost**: $2.37
 - **Knowledge items**: 2
 
-**Plugins migrated**: serverless-pseudo-parameters, serverless-dynamodb-local, serverless-offline-scheduler, serverless-offline-sqs-esmq, serverless-offline
+**CDK Quality**:
+- L2 constructs: 0 | Cfn escape hatches: 3 | L2 ratio: 0.0
+- TODO/FIXME comments: 0
+- ⚠️ lib/serverless-boilerplate-stack.ts: 3 CfnResource/escape hatch(es)
 
 ### serverless-puppeteer-layers
 
 - **URL**: https://github.com/RafalWilinski/serverless-puppeteer-layers
 - **Stars**: 272
-- **LOC**: N/A
+- **LOC**: 93
 - **Status**: ✅ success
 - **Validation score**: 2/2 criteria passed → ✅ success
 - **Build**: ✅ pass
-- **Time taken**: 1204s
-- **Agent minutes**: 26.65
-- **Cost**: $0.93
+- **Time taken**: 1081s
+- **Agent minutes**: 34.36
+- **Cost**: $1.20
 - **Knowledge items**: 2
 
-**Plugins migrated**: serverless-apigw-binary, serverless-apigwy-binary
+**CDK Quality**:
+- L2 constructs: 1 | Cfn escape hatches: 3 | L2 ratio: 0.25
+- TODO/FIXME comments: 0
+- Constructs used: RestApi
+- ⚠️ lib/serverless-puppeteer-layers-stack.ts: 3 CfnResource/escape hatch(es)
 
 ### serverless-react-boilerplate
 
 - **URL**: https://github.com/arabold/serverless-react-boilerplate
 - **Stars**: 245
-- **LOC**: N/A
+- **LOC**: 229
 - **Status**: ✅ success
 - **Validation score**: 2/2 criteria passed → ✅ success
 - **Build**: ✅ pass
-- **Time taken**: 2100s
-- **Agent minutes**: 84.98
-- **Cost**: $2.97
+- **Time taken**: 1364s
+- **Agent minutes**: 55.14
+- **Cost**: $1.93
 - **Knowledge items**: 2
 
-**Plugins migrated**: serverless-webpack, serverless-plugin-scripts, serverless-offline, serverless-s3-deploy
+**CDK Quality**:
+- L2 constructs: 3 | Cfn escape hatches: 4 | L2 ratio: 0.43
+- TODO/FIXME comments: 1
+- Constructs used: Bucket, Function, RestApi
+- ⚠️ lib/serverless-react-boilerplate-stack.ts: 4 CfnResource/escape hatch(es)

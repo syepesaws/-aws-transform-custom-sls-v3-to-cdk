@@ -1,13 +1,37 @@
 {
   "repo": "Serverless-Boilerplate-Express-TypeScript",
   "url": "https://github.com/ixartz/Serverless-Boilerplate-Express-TypeScript",
+  "stars": "571",
+  "loc": 263,
   "transformation_status": "success",
+  "atx_status": "success",
   "failure_reason": "",
   "build_status": "pass",
-  "duration_seconds": 1628,
-  "agent_minutes": "52.91",
-  "cost": "$1.85",
+  "duration_seconds": 1276,
+  "agent_minutes": "47.58",
+  "cost": "$1.67",
   "knowledge_items": "2",
-  "conversation_id": "20260313_165237_edc57f69",
-  "timestamp": "2026-03-13T17:19:59Z"
+  "conversation_id": "20260401_171636_1634dc5c",
+  "timestamp": "2026-04-01T17:38:04Z",
+  "criteria": {},
+  "issues_encountered": [],
+  "manual_fixes_needed": [],
+  "plugins_migrated": [],
+  "functions_count": "N/A",
+  "cdk_quality": {
+    "l2_constructs": 0,
+    "cfn_escape_hatches": 3,
+    "todo_comments": 0,
+    "unused_imports": 0,
+    "total_ts_files": 8,
+    "total_ts_loc": 263,
+    "cdk_stack_files": [
+      "lib/serverless-boilerplate-stack.ts"
+    ],
+    "constructs_used": [],
+    "issues": [
+      "lib/serverless-boilerplate-stack.ts: 3 CfnResource/escape hatch(es)"
+    ],
+    "l2_ratio": 0.0
+  }
 }

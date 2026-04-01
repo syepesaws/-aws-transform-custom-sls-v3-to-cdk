@@ -1,6 +1,20 @@
 transformation_name: sls-v3-to-cdk
 build_command: npx cdk synth
 repos:
+- url: https://github.com/dougmoscrop/serverless-http
+  name: serverless-http
+  stars: 1781
+  plugins:
+  - serverless-plugin-custom-binary
+  - serverless-plugin-include-dependencies
+  - serverless-offline
+- url: https://github.com/AnomalyInnovations/serverless-nodejs-starter
+  name: serverless-nodejs-starter
+  stars: 756
+  plugins:
+  - serverless-bundle
+  - serverless-offline
+  - serverless-dotenv-plugin
 - url: https://github.com/ixartz/Serverless-Boilerplate-Express-TypeScript
   name: Serverless-Boilerplate-Express-TypeScript
   stars: 571

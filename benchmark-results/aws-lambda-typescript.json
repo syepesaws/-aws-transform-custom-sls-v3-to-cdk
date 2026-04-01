@@ -1,13 +1,37 @@
 {
   "repo": "aws-lambda-typescript",
   "url": "https://github.com/balassy/aws-lambda-typescript",
+  "stars": "265",
+  "loc": 1469,
   "transformation_status": "success",
+  "atx_status": "success",
   "failure_reason": "",
   "build_status": "pass",
-  "duration_seconds": 2144,
-  "agent_minutes": "64.21",
-  "cost": "$2.25",
+  "duration_seconds": 1195,
+  "agent_minutes": "46.02",
+  "cost": "$1.61",
   "knowledge_items": "2",
-  "conversation_id": "20260313_165412_b4f5eb53",
-  "timestamp": "2026-03-13T17:30:11Z"
+  "conversation_id": "20260401_171610_b736db90",
+  "timestamp": "2026-04-01T17:36:15Z",
+  "criteria": {},
+  "issues_encountered": [],
+  "manual_fixes_needed": [],
+  "plugins_migrated": [],
+  "functions_count": "N/A",
+  "cdk_quality": {
+    "l2_constructs": 0,
+    "cfn_escape_hatches": 5,
+    "todo_comments": 1,
+    "unused_imports": 0,
+    "total_ts_files": 31,
+    "total_ts_loc": 1469,
+    "cdk_stack_files": [
+      "lib/serverless-sample-stack.ts"
+    ],
+    "constructs_used": [],
+    "issues": [
+      "lib/serverless-sample-stack.ts: 5 CfnResource/escape hatch(es)"
+    ],
+    "l2_ratio": 0.0
+  }
 }
