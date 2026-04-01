@@ -13,6 +13,10 @@ scripts/
   scrape_repos.py             # GitHub search for candidate repos
   run_benchmark.py            # ATX execution wrapper with telemetry
   aggregate_results.py        # Parse results → BENCHMARKS.md
+  analyze_cdk_quality.py      # Static analysis of generated CDK code
+  log_fixes.py                # Track manual fixes per repo
+  compare_runs.py             # Regression tracking across pipeline runs
+  sync_results.py             # Download results from S3
 config.yaml                   # Repo candidates + benchmark parameters
 BENCHMARKS.md                 # Results summary
 ```
@@ -54,6 +58,23 @@ Each execution captures:
 - Knowledge items generated
 - Manual fixes required
 - Code quality observations
+
+## Post-Run Analysis
+
+```bash
+# CDK code quality analysis (L2 vs CfnResource, TODOs, construct usage)
+python scripts/analyze_cdk_quality.py                     # all repos in .workdir/
+python scripts/analyze_cdk_quality.py --repo <name>       # single repo
+
+# Log manual fixes after reviewing a transformation
+python scripts/log_fixes.py <repo> --fix "Description" --category iam
+python scripts/log_fixes.py <repo> --issue "Description"
+python scripts/log_fixes.py <repo> --show
+
+# Compare runs for regression tracking (reads from S3)
+python scripts/compare_runs.py --profile demo                              # latest vs previous
+python scripts/compare_runs.py --profile demo --baseline <id> --current <id>
+```
 
 ## Pipeline (CodeBuild / CodePipeline)
 

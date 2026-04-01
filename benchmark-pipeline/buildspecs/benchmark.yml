@@ -15,6 +15,7 @@ phases:
   build:
     commands:
       - python scripts/run_benchmark.py
+      - python scripts/analyze_cdk_quality.py --repo "${REPO_NAME}" || true
   post_build:
     commands:
       - export RUN_ID="${CODEBUILD_RESOLVED_SOURCE_VERSION:-$(date -u +%Y-%m-%dT%H-%M-%SZ)}"

@@ -9,14 +9,35 @@ from datetime import datetime, timezone
 
 PROJECT_DIR = os.path.join(os.path.dirname(__file__), "..")
 RESULTS_DIR = os.path.join(PROJECT_DIR, "benchmark-results")
+CONFIG_PATH = os.path.join(PROJECT_DIR, "config.yaml")
 OUTPUT = os.path.join(PROJECT_DIR, "BENCHMARKS.md")
 
 
+def load_config():
+    """Load config.yaml to enrich results with repo metadata."""
+    if not os.path.exists(CONFIG_PATH):
+        return {}
+    import yaml
+    with open(CONFIG_PATH) as f:
+        config = yaml.safe_load(f)
+    return {r["name"]: r for r in config.get("repos", [])}
+
+
 def load_results():
+    repo_meta = load_config()
     results = []
     for path in sorted(glob.glob(os.path.join(RESULTS_DIR, "*.json"))):
         with open(path) as f:
-            results.append(json.load(f))
+            r = json.load(f)
+        # Enrich from config.yaml when result JSON is missing metadata
+        meta = repo_meta.get(r["repo"], {})
+        if r.get("stars") in (None, "N/A"):
+            r["stars"] = meta.get("stars", "N/A")
+        if r.get("loc") in (None, "N/A"):
+            r["loc"] = "N/A"
+        if r.get("plugins_migrated") in (None, []) and meta.get("plugins"):
+            r.setdefault("plugins_migrated", meta["plugins"])
+        results.append(r)
     return results
 
 
@@ -25,10 +46,22 @@ def status_icon(s):
 
 
 def compute_criteria_score(r):
-    """Return (passed, total_verifiable) from criteria, derive effective status."""
+    """Return (passed, total_verifiable, effective_status) from criteria.
+
+    When no criteria exist, derive a simple score from build_status + transformation_status
+    so the summary table always shows something meaningful.
+    """
     criteria = r.get("criteria", {})
     if not criteria:
-        return None, None, r.get("transformation_status", "unknown")
+        # Fallback: synthesize a score from the two booleans we always have
+        passed = 0
+        total = 2
+        if r.get("transformation_status") == "success":
+            passed += 1
+        if r.get("build_status") == "pass":
+            passed += 1
+        status = "success" if passed == total else ("partial" if passed > 0 else "failure")
+        return passed, total, status
     passed = sum(1 for v in criteria.values() if v.get("status") == "PASS")
     verifiable = sum(1 for v in criteria.values() if v.get("status") in ("PASS", "FAIL"))
     if verifiable == 0:
@@ -68,20 +101,25 @@ def generate_markdown(results):
 
     lines.extend([
         "## Summary\n",
-        "| Repository | Stars | LOC | Status | Score | Build | Time (s) | Agent Min | Cost | Knowledge Items |",
-        "|------------|-------|-----|--------|-------|-------|----------|-----------|------|-----------------|",
+        "| Repository | Stars | LOC | Fns | Plugins | Status | Score | Build | Time (s) | Agent Min | Cost | KIs |",
+        "|------------|-------|-----|-----|---------|--------|-------|-------|----------|-----------|------|-----|",
     ])
 
     for r in results:
         cost = r.get("cost", "N/A")
         stars = r.get("stars", "N/A")
         loc = r.get("loc", "N/A")
+        fns = r.get("functions_count", "N/A")
+        plugins = r.get("plugins_migrated", [])
+        plugin_count = len(plugins) if isinstance(plugins, list) else "N/A"
         passed, verifiable, effective_status = compute_criteria_score(r)
-        score = f"{passed}/{verifiable}" if verifiable is not None else "—"
+        score = f"{passed}/{verifiable}"
         lines.append(
             f"| [{r['repo']}]({r['url']}) "
             f"| {stars} "
             f"| {loc} "
+            f"| {fns} "
+            f"| {plugin_count} "
             f"| {status_icon(effective_status)} "
             f"| {score} "
             f"| {build_icon(r['build_status'])} "
@@ -148,6 +186,18 @@ def generate_markdown(results):
         plugins = r.get("plugins_migrated", [])
         if plugins:
             lines.append(f"\n**Plugins migrated**: {', '.join(plugins)}")
+
+        # CDK quality metrics
+        q = r.get("cdk_quality", {})
+        if q:
+            lines.append(f"\n**CDK Quality**:")
+            lines.append(f"- L2 constructs: {q.get('l2_constructs', 0)} | Cfn escape hatches: {q.get('cfn_escape_hatches', 0)} | L2 ratio: {q.get('l2_ratio', 'N/A')}")
+            lines.append(f"- TODO/FIXME comments: {q.get('todo_comments', 0)}")
+            if q.get("constructs_used"):
+                lines.append(f"- Constructs used: {', '.join(q['constructs_used'])}")
+            if q.get("issues"):
+                for qi in q["issues"]:
+                    lines.append(f"- ⚠️ {qi}")
 
         lines.append("")
 
