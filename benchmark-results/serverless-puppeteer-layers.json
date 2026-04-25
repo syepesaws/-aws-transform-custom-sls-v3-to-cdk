@@ -7,11 +7,11 @@
   "failure_reason": "",
   "build_status": "pass",
   "duration_seconds": 1326,
-  "agent_minutes": "N/A",
-  "cost": "N/A",
+  "agent_minutes": "21.52",
+  "cost": "$0.75",
   "knowledge_items": "N/A",
-  "conversation_id": "",
-  "timestamp": "2026-04-01T21:20:28Z",
+  "conversation_id": "20260401_203830_fd2736e9",
+  "timestamp": "2026-04-01T22:45:11Z",
   "criteria": {
     "cdk_synth": {
       "status": "PASS",
@@ -61,5 +61,11 @@
     "serverless-apigw-binary (replaced by binaryMediaTypes property on RestApi)",
     "serverless-apigwy-binary (replaced by binaryMediaTypes property on RestApi)"
   ],
-  "functions_count": 1
+  "functions_count": 1,
+  "git_diff": {
+    "files_changed": 9,
+    "lines_added": 283,
+    "lines_deleted": 50,
+    "lines_modified": 333
+  }
 }

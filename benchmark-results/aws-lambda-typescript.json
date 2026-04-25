@@ -7,11 +7,11 @@
   "failure_reason": "",
   "build_status": "pass",
   "duration_seconds": 1814,
-  "agent_minutes": "N/A",
-  "cost": "N/A",
+  "agent_minutes": "29.67",
+  "cost": "$1.04",
   "knowledge_items": "N/A",
-  "conversation_id": "",
-  "timestamp": "2026-04-01T21:20:14Z",
+  "conversation_id": "20260401_203829_a482701c",
+  "timestamp": "2026-04-01T22:44:46Z",
   "criteria": {
     "cdk_synth": {
       "status": "PASS",
@@ -67,5 +67,11 @@
     "serverless-iam-roles-per-function (implicit - CDK creates per-function IAM roles by default)",
     "serverless-stack-output (replaced by CDK CfnOutput)"
   ],
-  "functions_count": 4
+  "functions_count": 4,
+  "git_diff": {
+    "files_changed": 10,
+    "lines_added": 200,
+    "lines_deleted": 35,
+    "lines_modified": 235
+  }
 }

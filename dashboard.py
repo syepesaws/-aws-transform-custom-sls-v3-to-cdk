@@ -303,6 +303,7 @@ with tab_results:
         rows = []
         for r in results:
             agent_min = r.get("agent_minutes", "N/A")
+            gd = r.get("git_diff", {})
             rows.append({
                 "Repo": r["repo"],
                 "Stars": r.get("stars", "N/A"),
@@ -311,8 +312,9 @@ with tab_results:
                 "Duration (s)": r.get("duration_seconds", "N/A"),
                 "Agent Min": agent_min,
                 "Cost": r.get("cost", "N/A"),
-                "LOC": r.get("loc", "N/A"),
-                "L2 Ratio": r.get("cdk_quality", {}).get("l2_ratio", "N/A"),
+                "Fns": r.get("functions_count", "N/A"),
+                "Files Δ": gd.get("files_changed", "N/A"),
+                "Lines +/-": f"+{gd['lines_added']}/-{gd['lines_deleted']}" if gd.get("lines_added") is not None else "N/A",
                 "Plugins": len(r.get("plugins_migrated", [])),
             })
 

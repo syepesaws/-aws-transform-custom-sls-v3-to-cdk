@@ -101,23 +101,24 @@ def generate_markdown(results):
 
     lines.extend([
         "## Summary\n",
-        "| Repository | Stars | LOC | Fns | Plugins | Status | Score | Build | Time (s) | Agent Min | Cost | KIs |",
-        "|------------|-------|-----|-----|---------|--------|-------|-------|----------|-----------|------|-----|",
+        "| Repository | Stars | Fns | Plugins | Status | Score | Build | Time (s) | Agent Min | Cost | Files Δ | Lines +/- |",
+        "|------------|-------|-----|---------|--------|-------|-------|----------|-----------|------|---------|-----------|",
     ])
 
     for r in results:
         cost = r.get("cost", "N/A")
         stars = r.get("stars", "N/A")
-        loc = r.get("loc", "N/A")
         fns = r.get("functions_count", "N/A")
         plugins = r.get("plugins_migrated", [])
         plugin_count = len(plugins) if isinstance(plugins, list) else "N/A"
         passed, verifiable, effective_status = compute_criteria_score(r)
         score = f"{passed}/{verifiable}"
+        gd = r.get("git_diff", {})
+        files_changed = gd.get("files_changed", "N/A")
+        lines_plus_minus = f"+{gd['lines_added']}/-{gd['lines_deleted']}" if gd.get("lines_added") is not None else "N/A"
         lines.append(
             f"| [{r['repo']}]({r['url']}) "
             f"| {stars} "
-            f"| {loc} "
             f"| {fns} "
             f"| {plugin_count} "
             f"| {status_icon(effective_status)} "
@@ -126,7 +127,8 @@ def generate_markdown(results):
             f"| {r['duration_seconds']} "
             f"| {r['agent_minutes']} "
             f"| {cost} "
-            f"| {r['knowledge_items']} |"
+            f"| {files_changed} "
+            f"| {lines_plus_minus} |"
         )
 
     lines.append("\n## Detailed Results\n")
@@ -148,7 +150,10 @@ def generate_markdown(results):
         lines.append(f"- **Time taken**: {r['duration_seconds']}s")
         lines.append(f"- **Agent minutes**: {r['agent_minutes']}")
         lines.append(f"- **Cost**: {r.get('cost', 'N/A')}")
-        lines.append(f"- **Knowledge items**: {r['knowledge_items']}")
+
+        gd = r.get("git_diff", {})
+        if gd and gd.get("files_changed"):
+            lines.append(f"- **Git diff**: {gd['files_changed']} files changed, +{gd.get('lines_added', 0)} -{gd.get('lines_deleted', 0)} ~{gd.get('lines_modified', 0)}")
 
         # Build log snippet on failure
         build_log = os.path.join(RESULTS_DIR, f"{name}_build.log")

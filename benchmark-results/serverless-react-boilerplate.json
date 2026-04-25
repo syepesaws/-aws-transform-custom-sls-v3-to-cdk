@@ -7,11 +7,11 @@
   "failure_reason": "",
   "build_status": "pass",
   "duration_seconds": 2127,
-  "agent_minutes": "N/A",
-  "cost": "N/A",
+  "agent_minutes": "34.83",
+  "cost": "$1.22",
   "knowledge_items": "N/A",
-  "conversation_id": "",
-  "timestamp": "2026-04-01T21:20:32Z",
+  "conversation_id": "20260401_203839_cb22f4e4",
+  "timestamp": "2026-04-01T22:45:16Z",
   "criteria": {
     "cdk_synth": {
       "status": "PASS",
@@ -69,5 +69,11 @@
     "serverless-s3-deploy \u2192 BucketDeployment construct with CacheControl",
     "serverless-offline \u2192 AWS SAM CLI (sam local start-api)"
   ],
-  "functions_count": 1
+  "functions_count": 1,
+  "git_diff": {
+    "files_changed": 10,
+    "lines_added": 56,
+    "lines_deleted": 8,
+    "lines_modified": 64
+  }
 }

@@ -7,11 +7,11 @@
   "failure_reason": "",
   "build_status": "pass",
   "duration_seconds": 1566,
-  "agent_minutes": "N/A",
-  "cost": "N/A",
+  "agent_minutes": "25.55",
+  "cost": "$0.89",
   "knowledge_items": "N/A",
-  "conversation_id": "",
-  "timestamp": "2026-04-01T21:20:10Z",
+  "conversation_id": "20260401_203825_8b33b7e3",
+  "timestamp": "2026-04-01T22:44:40Z",
   "criteria": {
     "cdk_synth": {
       "status": "PASS",
@@ -65,5 +65,11 @@
     "serverless-offline -> AWS SAM CLI (sam local start-api)",
     "serverless-dotenv-plugin -> process.env at CDK synth/deploy time"
   ],
-  "functions_count": 1
+  "functions_count": 1,
+  "git_diff": {
+    "files_changed": 9,
+    "lines_added": 46,
+    "lines_deleted": 13,
+    "lines_modified": 59
+  }
 }

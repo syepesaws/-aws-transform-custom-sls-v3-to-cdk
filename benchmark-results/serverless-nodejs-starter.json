@@ -7,11 +7,11 @@
   "failure_reason": "",
   "build_status": "pass",
   "duration_seconds": 1193,
-  "agent_minutes": "N/A",
-  "cost": "N/A",
+  "agent_minutes": "18.57",
+  "cost": "$0.65",
   "knowledge_items": "N/A",
-  "conversation_id": "",
-  "timestamp": "2026-04-01T21:20:25Z",
+  "conversation_id": "20260401_203852_baf90239",
+  "timestamp": "2026-04-01T22:45:04Z",
   "criteria": {
     "cdk_synth": {
       "status": "PASS",
@@ -62,5 +62,11 @@
     "serverless-offline \u2192 SAM CLI local development commands (npm run local:api)",
     "serverless-dotenv-plugin \u2192 process.env pattern (env vars were commented out in original)"
   ],
-  "functions_count": 1
+  "functions_count": 1,
+  "git_diff": {
+    "files_changed": 9,
+    "lines_added": 43,
+    "lines_deleted": 14,
+    "lines_modified": 57
+  }
 }

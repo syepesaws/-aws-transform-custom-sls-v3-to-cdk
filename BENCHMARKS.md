@@ -1,22 +1,22 @@
 # Benchmark Results
 
-> Last updated: 2026-04-01 21:20 UTC
+> Last updated: 2026-04-01 22:45 UTC
 
 **7/7** succeeded | **0/7** partial | **7/7** builds passed | **7/7** ATX reported success
 
-**Total agent minutes**: 0.00 | **Total cost**: $0.00 (@ $0.035/min)
+**Total agent minutes**: 190.53 | **Total cost**: $6.67 (@ $0.035/min)
 
 ## Summary
 
-| Repository | Stars | LOC | Fns | Plugins | Status | Score | Build | Time (s) | Agent Min | Cost | KIs |
-|------------|-------|-----|-----|---------|--------|-------|-------|----------|-----------|------|-----|
-| [Serverless-Boilerplate-Express-TypeScript](https://github.com/ixartz/Serverless-Boilerplate-Express-TypeScript) | 571 | N/A | 1 | 3 | ✅ | 8/8 | ✅ | 1566 | N/A | N/A | N/A |
-| [aws-lambda-typescript](https://github.com/balassy/aws-lambda-typescript) | 265 | N/A | 4 | 5 | ✅ | 8/8 | ✅ | 1814 | N/A | N/A | N/A |
-| [serverless-architecture-boilerplate](https://github.com/msfidelis/serverless-architecture-boilerplate) | 391 | N/A | 8 | 3 | ✅ | 9/9 | ✅ | 1794 | N/A | N/A | N/A |
-| [serverless-http](https://github.com/dougmoscrop/serverless-http) | 1781 | N/A | 9 | 4 | ✅ | 8/8 | ✅ | 1895 | N/A | N/A | N/A |
-| [serverless-nodejs-starter](https://github.com/AnomalyInnovations/serverless-nodejs-starter) | 756 | N/A | 1 | 3 | ✅ | 7/7 | ✅ | 1193 | N/A | N/A | N/A |
-| [serverless-puppeteer-layers](https://github.com/RafalWilinski/serverless-puppeteer-layers) | 272 | N/A | 1 | 2 | ✅ | 7/7 | ✅ | 1326 | N/A | N/A | N/A |
-| [serverless-react-boilerplate](https://github.com/arabold/serverless-react-boilerplate) | 245 | N/A | 1 | 4 | ✅ | 8/8 | ✅ | 2127 | N/A | N/A | N/A |
+| Repository | Stars | Fns | Plugins | Status | Score | Build | Time (s) | Agent Min | Cost | Files Δ | Lines +/- |
+|------------|-------|-----|---------|--------|-------|-------|----------|-----------|------|---------|-----------|
+| [Serverless-Boilerplate-Express-TypeScript](https://github.com/ixartz/Serverless-Boilerplate-Express-TypeScript) | 571 | 1 | 3 | ✅ | 8/8 | ✅ | 1566 | 25.55 | $0.89 | 9 | +46/-13 |
+| [aws-lambda-typescript](https://github.com/balassy/aws-lambda-typescript) | 265 | 4 | 5 | ✅ | 8/8 | ✅ | 1814 | 29.67 | $1.04 | 10 | +200/-35 |
+| [serverless-architecture-boilerplate](https://github.com/msfidelis/serverless-architecture-boilerplate) | 391 | 8 | 3 | ✅ | 9/9 | ✅ | 1794 | 29.37 | $1.03 | 9 | +512/-137 |
+| [serverless-http](https://github.com/dougmoscrop/serverless-http) | 1781 | 9 | 4 | ✅ | 8/8 | ✅ | 1895 | 31.02 | $1.09 | 11 | +64/-12 |
+| [serverless-nodejs-starter](https://github.com/AnomalyInnovations/serverless-nodejs-starter) | 756 | 1 | 3 | ✅ | 7/7 | ✅ | 1193 | 18.57 | $0.65 | 9 | +43/-14 |
+| [serverless-puppeteer-layers](https://github.com/RafalWilinski/serverless-puppeteer-layers) | 272 | 1 | 2 | ✅ | 7/7 | ✅ | 1326 | 21.52 | $0.75 | 9 | +283/-50 |
+| [serverless-react-boilerplate](https://github.com/arabold/serverless-react-boilerplate) | 245 | 1 | 4 | ✅ | 8/8 | ✅ | 2127 | 34.83 | $1.22 | 10 | +56/-8 |
 
 ## Detailed Results
 
@@ -29,9 +29,9 @@
 - **Validation score**: 8/8 criteria passed → ✅ success
 - **Build**: ✅ pass
 - **Time taken**: 1566s
-- **Agent minutes**: N/A
-- **Cost**: N/A
-- **Knowledge items**: N/A
+- **Agent minutes**: 25.55
+- **Cost**: $0.89
+- **Git diff**: 9 files changed, +46 -13 ~59
 
 | Criterion | Status | Detail |
 |-----------|--------|--------|
@@ -66,9 +66,9 @@
 - **Validation score**: 8/8 criteria passed → ✅ success
 - **Build**: ✅ pass
 - **Time taken**: 1814s
-- **Agent minutes**: N/A
-- **Cost**: N/A
-- **Knowledge items**: N/A
+- **Agent minutes**: 29.67
+- **Cost**: $1.04
+- **Git diff**: 10 files changed, +200 -35 ~235
 
 | Criterion | Status | Detail |
 |-----------|--------|--------|
@@ -103,9 +103,9 @@
 - **Validation score**: 9/9 criteria passed → ✅ success
 - **Build**: ✅ pass
 - **Time taken**: 1794s
-- **Agent minutes**: N/A
-- **Cost**: N/A
-- **Knowledge items**: N/A
+- **Agent minutes**: 29.37
+- **Cost**: $1.03
+- **Git diff**: 9 files changed, +512 -137 ~649
 
 | Criterion | Status | Detail |
 |-----------|--------|--------|
@@ -140,9 +140,9 @@
 - **Validation score**: 8/8 criteria passed → ✅ success
 - **Build**: ✅ pass
 - **Time taken**: 1895s
-- **Agent minutes**: N/A
-- **Cost**: N/A
-- **Knowledge items**: N/A
+- **Agent minutes**: 31.02
+- **Cost**: $1.09
+- **Git diff**: 11 files changed, +64 -12 ~76
 
 | Criterion | Status | Detail |
 |-----------|--------|--------|
@@ -173,9 +173,9 @@
 - **Validation score**: 7/7 criteria passed → ✅ success
 - **Build**: ✅ pass
 - **Time taken**: 1193s
-- **Agent minutes**: N/A
-- **Cost**: N/A
-- **Knowledge items**: N/A
+- **Agent minutes**: 18.57
+- **Cost**: $0.65
+- **Git diff**: 9 files changed, +43 -14 ~57
 
 | Criterion | Status | Detail |
 |-----------|--------|--------|
@@ -206,9 +206,9 @@
 - **Validation score**: 7/7 criteria passed → ✅ success
 - **Build**: ✅ pass
 - **Time taken**: 1326s
-- **Agent minutes**: N/A
-- **Cost**: N/A
-- **Knowledge items**: N/A
+- **Agent minutes**: 21.52
+- **Cost**: $0.75
+- **Git diff**: 9 files changed, +283 -50 ~333
 
 | Criterion | Status | Detail |
 |-----------|--------|--------|
@@ -239,9 +239,9 @@
 - **Validation score**: 8/8 criteria passed → ✅ success
 - **Build**: ✅ pass
 - **Time taken**: 2127s
-- **Agent minutes**: N/A
-- **Cost**: N/A
-- **Knowledge items**: N/A
+- **Agent minutes**: 34.83
+- **Cost**: $1.22
+- **Git diff**: 10 files changed, +56 -8 ~64
 
 | Criterion | Status | Detail |
 |-----------|--------|--------|
